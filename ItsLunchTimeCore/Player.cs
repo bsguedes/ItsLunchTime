@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
-    public class Game
+    public class Player
     {
-        public Game( List<Player> players )
-        {
-            FavoriteFoodDeck foodDeck = new FavoriteFoodDeck();
-
-        }
     }
 }

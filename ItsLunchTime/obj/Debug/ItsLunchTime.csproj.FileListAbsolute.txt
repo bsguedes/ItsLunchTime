@@ -1,1 +1,13 @@
 C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\bin\Debug\ItsLunchTime.exe.config
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\bin\Debug\ItsLunchTime.exe
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\bin\Debug\ItsLunchTime.pdb
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.csprojResolveAssemblyReference.cache
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\MainWindow.baml
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\MainWindow.g.cs
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\App.g.cs
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime_MarkupCompile.cache
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.g.resources
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.Properties.Resources.resources
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.csproj.GenerateResource.Cache
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.exe
+C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\obj\Debug\ItsLunchTime.pdb

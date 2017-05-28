@@ -16,11 +16,11 @@ namespace ItsLunchTimeCore
         Vegetarian
     }
 
-    public class FoodCard
+    public class FoodCard : Card
     {
         public FoodType FoodType { get; private set; }
 
-        public FoodCard( FoodType type)
+        public FoodCard(FoodType type)
         {
             this.FoodType = type;
         }

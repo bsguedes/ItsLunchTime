@@ -3,6 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+ItsLunchTime/bin/
+ItsLunchTimeCore/bin/
+ItsLunchTime/obj/
+ItsLunchTimeCore/obj/
+
 # User-specific files
 *.suo
 *.user

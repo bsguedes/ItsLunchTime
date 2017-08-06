@@ -1,1 +1,0 @@
-C:\MinGW\msys\1.0\home\Bruno\workspace\ItsLunchTime\ItsLunchTime\bin\Debug\ItsLunchTime.exe.config

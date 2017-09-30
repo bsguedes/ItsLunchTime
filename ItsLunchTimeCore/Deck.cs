@@ -17,7 +17,7 @@ namespace ItsLunchTimeCore
 
         public void Shuffle()
         {
-
+            this.Cards.Shuffle();
         }
     }
 }

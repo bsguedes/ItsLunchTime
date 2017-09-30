@@ -6,7 +6,22 @@ using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
-    public class Player
+    public enum Character
     {
+        WarehouseManager,
+        ForeignAffairs,
+        CEO,
+        HR,
+        Marketing,
+        Intern,
+        Finance,
+        SalesRep,
+        Programmer,
+        Environment
+    }
+
+    public abstract class Player
+    {
+        public Character Character { get; private set; }
     }
 }

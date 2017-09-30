@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ItsLunchTimeCore
 {
-    public class FavoriteFoodDeck : Deck
+    internal class FavoriteFoodDeck : Deck
     {        
         public const int FOOD_TYPE_CARDS_REPEAT_COUNT = 3;
 
@@ -16,6 +16,8 @@ namespace ItsLunchTimeCore
                     Cards.Add(new FoodCard(type));
                 }
             }
+
+            base.Shuffle();
         }
     }
 }

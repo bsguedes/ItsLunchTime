@@ -18,15 +18,17 @@ namespace ItsLunchTimeCore
             }
         }
 
-        public static void ActionForCharacter(this IEnumerable<Player> players, Character character, Action<Player> action)
+        public static bool ActionForCharacter(this IEnumerable<Player> players, Character character, Action<Player> action)
         {
             foreach(Player player in players)
             {
                 if (player.Character == character)
                 {
                     action(player);
+                    return true;
                 }
             }
+            return false;
         }
 
         public static void Shuffle<T>(this IList<T> list)

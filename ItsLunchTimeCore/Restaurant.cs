@@ -7,7 +7,17 @@ using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
-    public class Restaurant
+    public enum Restaurant
+    {
+        Russo,
+        Palatus,
+        GustoDiBacio,
+        Silva,
+        Panorama,
+        JoeAndLeos
+    }
+
+    public class RestaurantPlace
     {
         public string Name { get; private set; }
         public int Price { get; private set; }

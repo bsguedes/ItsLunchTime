@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{64A64013-7AA5-4967-BDF8-4F9ECF5C95F6}</ProjectGuid>
+    <ProjectGuid>{713A7632-A899-4CAE-AF92-B6CEFD02A15C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ItsLunchTimeCore</RootNamespace>
-    <AssemblyName>ItsLunchTimeCore</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>BotAgressive</RootNamespace>
+    <AssemblyName>BotAgressive</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -40,27 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Board.cs" />
-    <Compile Include="Card.cs" />
-    <Compile Include="Deck.cs" />
-    <Compile Include="Definitions.cs" />
-    <Compile Include="DessertDeck.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FavoriteFoodDeck.cs" />
-    <Compile Include="FoodCard.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="LoyaltyDeck.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="PlayerBonusDeck.cs" />
-    <Compile Include="PreferencesDeck.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Restaurant.cs" />
-    <Compile Include="PlayerBonus.cs" />
-    <Compile Include="RestaurantDailyBonusDeck.cs" />
-    <Compile Include="RestaurantModifier.cs" />
-    <Compile Include="RestaurantTrack.cs" />
-    <Compile Include="TeamBonus.cs" />
-    <Compile Include="TeamBonusDeck.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ItsLunchTimeCore\ItsLunchTimeCore.csproj">
+      <Project>{64a64013-7aa5-4967-bdf8-4f9ecf5c95f6}</Project>
+      <Name>ItsLunchTimeCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

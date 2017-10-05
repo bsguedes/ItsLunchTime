@@ -20,8 +20,12 @@ namespace ItsLunchTimeCore
         internal RestaurantDailyBonusDeck RestaurantDailyBonusDeck { get; }
         internal DessertDeck DessertDeck { get; }
 
-        public Game( List<Player> players )
+        internal List<Player> Players { get; }
+
+        public Game( List<Player> players, DifficultyLevel difficulty )
         {
+            this.Players = players;
+
             PublicBoard = new PublicBoard();
             
             FoodDeck = new FavoriteFoodDeck();
@@ -139,12 +143,30 @@ namespace ItsLunchTimeCore
 
         private void RevealTeamObjective()
         {
-            throw new NotImplementedException();
+            if (!this.Players.ActionForCharacter(Character.CEO, ceo =>
+            {
+                PublicBoard.CurrentTeamBonus = ceo.ChooseOneTeamBonus(this.TeamBonusDeck.Draw(), this.TeamBonusDeck.Draw());
+            }))
+            {
+                PublicBoard.CurrentTeamBonus = this.TeamBonusDeck.Draw();
+            }
         }
 
         private void RevealPlayerWeeklyObjectives(int turn_index)
         {
-            throw new NotImplementedException();
+            List<PlayerBonusCard> list = new List<PlayerBonusCard>
+            {
+                this.PlayerBonusDeck.Draw()
+            };
+            if (turn_index >= 3)
+            {
+                list.Add(this.PlayerBonusDeck.Draw());
+            }
+            if (turn_index >= 4)
+            {
+                list.Add(this.PlayerBonusDeck.Draw());
+            }
+            PublicBoard.SetNewPlayerBonuses(list);            
         }
     }
 }

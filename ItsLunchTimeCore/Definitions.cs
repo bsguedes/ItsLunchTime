@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
-    public abstract class TeamBonusCard : Card
+    public enum DifficultyLevel
     {
+        Easy,
+        Medium,
+        Hard
     }
 }

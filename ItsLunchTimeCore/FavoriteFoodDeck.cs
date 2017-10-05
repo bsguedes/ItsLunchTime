@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ItsLunchTimeCore
 {
-    internal class FavoriteFoodDeck : Deck
+    internal class FavoriteFoodDeck : Deck<FoodCard>
     {        
         public const int FOOD_TYPE_CARDS_REPEAT_COUNT = 3;
 

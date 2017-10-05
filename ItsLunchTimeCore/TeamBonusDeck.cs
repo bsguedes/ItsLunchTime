@@ -1,6 +1,6 @@
 ﻿namespace ItsLunchTimeCore
 {
-    internal class TeamBonusDeck
+    internal class TeamBonusDeck : Deck<TeamBonusCard>
     {
         public TeamBonusDeck()
         {

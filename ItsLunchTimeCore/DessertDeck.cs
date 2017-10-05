@@ -1,10 +1,15 @@
-﻿namespace ItsLunchTimeCore
+﻿namespace ItsLunchTimeCore.Decks
 {
-    internal class DessertDeck
+    internal class DessertDeck : Deck<DessertCard>
     {        
         public DessertDeck(int count)
         {
             
         }
+    }
+
+    public class DessertCard : Card
+    {
+
     }
 }

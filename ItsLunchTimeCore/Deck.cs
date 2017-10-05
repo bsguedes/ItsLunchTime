@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItsLunchTimeCore
+namespace ItsLunchTimeCore.Decks
 {
     public abstract class Deck<T> where T : Card
     {
@@ -26,5 +26,9 @@ namespace ItsLunchTimeCore
             this.Cards.RemoveAt(0);
             return c;
         }
+    }
+
+    public abstract class Card
+    {
     }
 }

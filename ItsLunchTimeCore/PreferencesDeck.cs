@@ -1,4 +1,4 @@
-﻿namespace ItsLunchTimeCore
+﻿namespace ItsLunchTimeCore.Decks
 {
     internal class PreferencesDeck : Deck<PreferenceCard>
     {

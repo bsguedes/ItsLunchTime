@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ItsLunchTimeCore.Decks;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

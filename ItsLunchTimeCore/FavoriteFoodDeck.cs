@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ItsLunchTimeCore.Deck
+namespace ItsLunchTimeCore.Decks
 {
     internal class FavoriteFoodDeck : Deck<FoodCard>
     {        
@@ -19,17 +19,7 @@ namespace ItsLunchTimeCore.Deck
 
             base.Shuffle();
         }
-    }
-
-    public enum FoodType
-    {
-        Brazilian,
-        Chinese,
-        Burger,
-        Pizza,
-        Pasta,
-        Vegetarian
-    }
+    }    
 
     public class FoodCard : Card
     {

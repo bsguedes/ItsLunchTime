@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItsLunchTimeCore
+namespace ItsLunchTimeCore.Decks
 {
     internal class PlayerBonusDeck : Deck<PlayerBonusCard>
     {

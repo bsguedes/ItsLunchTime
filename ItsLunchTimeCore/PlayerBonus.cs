@@ -12,6 +12,11 @@ namespace ItsLunchTimeCore.Decks
         {
 
         }
+
+        public override IEnumerable<PlayerBonusCard> GetCards()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public abstract class PlayerBonusCard : Card

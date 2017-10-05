@@ -1,10 +1,18 @@
-﻿namespace ItsLunchTimeCore.Decks
+﻿using System.Collections.Generic;
+
+namespace ItsLunchTimeCore.Decks
 {
     internal class PreferencesDeck : Deck<PreferenceCard>
     {
-        public PreferencesDeck()
+        public override IEnumerable<PreferenceCard> GetCards()
         {
-            this.Cards.Add(new PreferenceCard(Restaurant.Russo, 5, Restaurant.JoeAndLeos, 3, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.OneVP));
+            return new PreferenceCard[] {
+                new PreferenceCard(Restaurant.Russo, 5, Restaurant.JoeAndLeos, 3, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.OneVP),
+                new PreferenceCard(Restaurant.Russo, 5, Restaurant.Panorama, 1, Restaurant.Silva, Punishment.TwoVP, Punishment.TwoVP),
+                new PreferenceCard(Restaurant.Russo, 4, Restaurant.Silva, 3, Restaurant.Palatus, Punishment.TwoVP, Punishment.OneVP),
+                new PreferenceCard(Restaurant.Russo, 4, Restaurant.GustoDiBacio, 2, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP),
+                new PreferenceCard(Restaurant.Russo, 4, Restaurant.Palatus, 2, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.TwoVP)
+            };
         }
     }
 

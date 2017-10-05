@@ -19,6 +19,11 @@ namespace ItsLunchTimeCore.Decks
 
             base.Shuffle();
         }
+
+        public override IEnumerable<FoodCard> GetCards()
+        {
+            throw new NotImplementedException();
+        }
     }    
 
     public class FoodCard : Card

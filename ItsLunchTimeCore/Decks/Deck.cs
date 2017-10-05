@@ -11,9 +11,13 @@ namespace ItsLunchTimeCore.Decks
         public Deck()
         {
             this.Cards = new List<T>();
+            this.Cards.AddRange(GetCards());
+            this.Shuffle();
         }
 
-        protected List<T> Cards { get; private set; }
+        protected List<T> Cards { get; }
+
+        public abstract IEnumerable<T> GetCards();
 
         public void Shuffle()
         {

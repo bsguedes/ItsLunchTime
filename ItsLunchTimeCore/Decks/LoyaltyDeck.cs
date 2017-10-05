@@ -1,4 +1,5 @@
-﻿using ItsLunchTimeCore.Decks;
+﻿using System.Collections.Generic;
+using ItsLunchTimeCore.Decks;
 
 namespace ItsLunchTimeCore
 {
@@ -6,6 +7,11 @@ namespace ItsLunchTimeCore
     {
         public LoyaltyDeck()
         {
+        }
+
+        public override IEnumerable<LoyaltyCard> GetCards()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

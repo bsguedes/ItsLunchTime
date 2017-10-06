@@ -11,12 +11,28 @@ namespace ItsLunchTimeCore
 
         public override IEnumerable<LoyaltyCard> GetCards()
         {
-            throw new System.NotImplementedException();
+            yield return new LoyaltyCardVIP(Restaurant.Russo, new int[] { 1, 2, 3, 4 }, 1, 1);
         }
     }
 
-    public class LoyaltyCard : Card
+    public abstract class LoyaltyCard : Card
     {
+        public LoyaltyType Type { get; }
 
+        internal LoyaltyCard(LoyaltyType type)
+        {
+            this.Type = type;
+        }
+
+    }
+
+    public class LoyaltyCardVIP : LoyaltyCard
+    {
+        public Restaurant Restaurant { get; }
+
+        internal LoyaltyCardVIP(Restaurant restaurant, int[] bonus, int dessertTake, int dessertChooseFrom) : base(LoyaltyType.VIP)
+        {
+
+        }
     }
 }

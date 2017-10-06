@@ -6,38 +6,36 @@ namespace ItsLunchTimeCore.Decks
     {
         public override IEnumerable<PreferenceCard> GetCards()
         {
-            return new PreferenceCard[] {
-                new PreferenceCard(Restaurant.Russo, 5, Restaurant.JoeAndLeos, 3, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Russo, 5, Restaurant.Panorama, 1, Restaurant.Silva, Punishment.TwoVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.Russo, 4, Restaurant.Silva, 3, Restaurant.Palatus, Punishment.TwoVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Russo, 4, Restaurant.GustoDiBacio, 2, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Russo, 4, Restaurant.Palatus, 2, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.Palatus, 6, Restaurant.JoeAndLeos, 3, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar),
-                new PreferenceCard(Restaurant.Palatus, 5, Restaurant.Panorama, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.OneDollar),
-                new PreferenceCard(Restaurant.Palatus, 5, Restaurant.Silva, 1, Restaurant.Russo, Punishment.TwoVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.Palatus, 4, Restaurant.GustoDiBacio, 3, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Palatus, 4, Restaurant.Russo, 2, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.GustoDiBacio, 6, Restaurant.JoeAndLeos, 1, Restaurant.Silva, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.GustoDiBacio, 6, Restaurant.Panorama, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.GustoDiBacio, 5, Restaurant.Silva, 3, Restaurant.Palatus, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.GustoDiBacio, 5, Restaurant.Palatus, 2, Restaurant.Russo, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.GustoDiBacio, 4, Restaurant.Russo, 2, Restaurant.Palatus, Punishment.OneDollar, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.Silva, 7, Restaurant.JoeAndLeos, 4, Restaurant.Palatus, Punishment.TwoVP, Punishment.OneDollar),
-                new PreferenceCard(Restaurant.Silva, 6, Restaurant.Panorama, 3, Restaurant.GustoDiBacio, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Silva, 6, Restaurant.GustoDiBacio, 3, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar),
-                new PreferenceCard(Restaurant.Silva, 5, Restaurant.Palatus, 1, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.Silva, 5, Restaurant.Russo, 2, Restaurant.Panorama, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.Panorama, 7, Restaurant.JoeAndLeos, 3, Restaurant.Russo, Punishment.OneVP, Punishment.OneDollar ),
-                new PreferenceCard(Restaurant.Panorama, 7, Restaurant.Silva, 3, Restaurant.Russo, Punishment.TwoVP, Punishment.OneDollar ),
-                new PreferenceCard(Restaurant.Panorama, 6, Restaurant.GustoDiBacio, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.OneVP ),
-                new PreferenceCard(Restaurant.Panorama, 6, Restaurant.Palatus, 1, Restaurant.JoeAndLeos, Punishment.OneDollar, Punishment.TwoVP ),
-                new PreferenceCard(Restaurant.Panorama, 5, Restaurant.Russo, 2, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP ),
-                new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.Panorama, 4, Restaurant.GustoDiBacio, Punishment.OneVP, Punishment.OneVP),
-                new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.Silva, 4, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar),
-                new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.GustoDiBacio, 1, Restaurant.Russo, Punishment.OneVP, Punishment.TwoVP),
-                new PreferenceCard(Restaurant.JoeAndLeos, 6, Restaurant.Palatus, 3, Restaurant.GustoDiBacio, Punishment.OneDollar, Punishment.OneVP),
-                new PreferenceCard(Restaurant.JoeAndLeos, 6, Restaurant.Russo, 2, Restaurant.Palatus, Punishment.OneDollar, Punishment.OneVP),
-            };
+            yield return new PreferenceCard(Restaurant.Russo, 5, Restaurant.JoeAndLeos, 3, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Russo, 5, Restaurant.Panorama, 1, Restaurant.Silva, Punishment.TwoVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Russo, 4, Restaurant.Silva, 3, Restaurant.Palatus, Punishment.TwoVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Russo, 4, Restaurant.GustoDiBacio, 2, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Russo, 4, Restaurant.Palatus, 2, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Palatus, 6, Restaurant.JoeAndLeos, 3, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Palatus, 5, Restaurant.Panorama, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Palatus, 5, Restaurant.Silva, 1, Restaurant.Russo, Punishment.TwoVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Palatus, 4, Restaurant.GustoDiBacio, 3, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Palatus, 4, Restaurant.Russo, 2, Restaurant.Silva, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.GustoDiBacio, 6, Restaurant.JoeAndLeos, 1, Restaurant.Silva, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.GustoDiBacio, 6, Restaurant.Panorama, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.GustoDiBacio, 5, Restaurant.Silva, 3, Restaurant.Palatus, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.GustoDiBacio, 5, Restaurant.Palatus, 2, Restaurant.Russo, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.GustoDiBacio, 4, Restaurant.Russo, 2, Restaurant.Palatus, Punishment.OneDollar, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Silva, 7, Restaurant.JoeAndLeos, 4, Restaurant.Palatus, Punishment.TwoVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Silva, 6, Restaurant.Panorama, 3, Restaurant.GustoDiBacio, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Silva, 6, Restaurant.GustoDiBacio, 3, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Silva, 5, Restaurant.Palatus, 1, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Silva, 5, Restaurant.Russo, 2, Restaurant.Panorama, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Panorama, 7, Restaurant.JoeAndLeos, 3, Restaurant.Russo, Punishment.OneVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Panorama, 7, Restaurant.Silva, 3, Restaurant.Russo, Punishment.TwoVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.Panorama, 6, Restaurant.GustoDiBacio, 4, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.Panorama, 6, Restaurant.Palatus, 1, Restaurant.JoeAndLeos, Punishment.OneDollar, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.Panorama, 5, Restaurant.Russo, 2, Restaurant.JoeAndLeos, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.Panorama, 4, Restaurant.GustoDiBacio, Punishment.OneVP, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.Silva, 4, Restaurant.Panorama, Punishment.OneVP, Punishment.OneDollar);
+            yield return new PreferenceCard(Restaurant.JoeAndLeos, 7, Restaurant.GustoDiBacio, 1, Restaurant.Russo, Punishment.OneVP, Punishment.TwoVP);
+            yield return new PreferenceCard(Restaurant.JoeAndLeos, 6, Restaurant.Palatus, 3, Restaurant.GustoDiBacio, Punishment.OneDollar, Punishment.OneVP);
+            yield return new PreferenceCard(Restaurant.JoeAndLeos, 6, Restaurant.Russo, 2, Restaurant.Palatus, Punishment.OneDollar, Punishment.OneVP);
         }
     }
 

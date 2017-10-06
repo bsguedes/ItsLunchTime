@@ -23,6 +23,23 @@ namespace ItsLunchTimeCore
         Vegetarian
     }
 
+    public enum DessertType
+    {
+        Coffee,
+        IceCream,
+        Sagu,
+        Cream,
+        Pudding,
+        Cake
+    }
+
+    public enum LoyaltyType
+    {
+        VIP,
+        GOLD,
+        PLUS
+    }
+
     public static class Extensions
     {
         private static Random rng = new Random();

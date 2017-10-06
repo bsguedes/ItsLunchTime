@@ -60,8 +60,6 @@ namespace ItsLunchTimeCore
                ScorePlayerBonus();
 
            });
-
-
         }
 
         private void ScorePlayerBonus()

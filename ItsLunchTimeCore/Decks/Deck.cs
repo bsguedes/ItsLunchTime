@@ -30,6 +30,13 @@ namespace ItsLunchTimeCore.Decks
             this.Cards.RemoveAt(0);
             return c;
         }
+
+        internal void Recreate()
+        {
+            this.Cards.Clear();
+            this.Cards.AddRange(GetCards());
+            this.Shuffle();
+        }
     }
 
     public abstract class Card

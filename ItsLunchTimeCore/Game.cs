@@ -1,6 +1,7 @@
 ﻿using ItsLunchTimeCore.Decks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
@@ -15,7 +16,7 @@ namespace ItsLunchTimeCore
         internal PreferencesDeck PreferencesDeck { get; }
         internal TeamBonusDeck TeamBonusDeck { get; }
         internal PlayerBonusDeck PlayerBonusDeck { get; }
-        internal RestaurantDailyBonusDeck RestaurantDailyBonusDeck { get; }
+        internal RestaurantDailyModifierDeck RestaurantDailyModifierDeck { get; }
         internal DessertDeck DessertDeck { get; }
 
         internal List<Player> Players { get; }
@@ -31,10 +32,10 @@ namespace ItsLunchTimeCore
             PreferencesDeck = new PreferencesDeck();
             TeamBonusDeck = new TeamBonusDeck();
             PlayerBonusDeck = new PlayerBonusDeck();
-            RestaurantDailyBonusDeck = new RestaurantDailyBonusDeck();
+            RestaurantDailyModifierDeck = new RestaurantDailyModifierDeck();
             DessertDeck = new DessertDeck(players.Count);
 
-            MAX_WEEKS.Each(turn_index =>
+            MAX_WEEKS.Times(turn_index =>
            {
                RevealPlayerWeeklyObjectives(turn_index);
                RevealTeamObjective();
@@ -43,7 +44,7 @@ namespace ItsLunchTimeCore
                ChooseAFavoriteMeal();
                ChooseRestaurantPreferences();
 
-               DAYS_IN_WEEK.Each(day =>
+               DAYS_IN_WEEK.Times(day =>
               {
                   ChooseRestaurant();
                   RevealChoices();
@@ -114,27 +115,41 @@ namespace ItsLunchTimeCore
 
         private void ChooseRestaurant()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void ChooseRestaurantPreferences()
         {
-            throw new NotImplementedException();
+            Dictionary<Player, PreferenceCard> responses = new Dictionary<Player, PreferenceCard>();
+            this.Players.ForEach(player => responses[player] = player.AskPreferences());
+
+            Dictionary<Player, LoyaltyCard> responsesLoyalty = new Dictionary<Player, LoyaltyCard>();
+            this.Players.ForEach(player => responsesLoyalty[player] = player.AskLoyalty());
         }
 
         private void ChooseAFavoriteMeal()
         {
-            throw new NotImplementedException();
+            Dictionary<Player, FoodCard> responses = new Dictionary<Player, FoodCard>();
+            this.Players.ForEach(player => responses[player] = player.AskFavoriteFood());
         }
 
         private void DealCardsToPlayers()
         {
-            throw new NotImplementedException();
+            FoodDeck.Recreate();
+            LoyaltyDeck.Recreate();
+            PreferencesDeck.Recreate();
+
+            3.Times(() => this.Players.ForEach(player => player.GiveFoodCard(this.FoodDeck.Draw())));
+            3.Times(() => this.Players.ForEach(player => player.GiveLoyaltyCard(this.LoyaltyDeck.Draw())));
+            4.Times(() => this.Players.ForEach(player => player.GivePreferenceCard(this.PreferencesDeck.Draw())));
         }
 
         private void RevealDailyModifiers()
-        {
-            throw new NotImplementedException();
+        {            
+            foreach(RestaurantPlace rest in PublicBoard.Restaurants)
+            {
+                rest.Modifier = this.RestaurantDailyModifierDeck.Draw();
+            }
         }
 
         private void RevealTeamObjective()

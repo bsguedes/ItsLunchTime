@@ -2,15 +2,15 @@
 
 namespace ItsLunchTimeCore.Decks
 {
-    internal class RestaurantDailyBonusDeck : Deck<RestaurantDailyBonusCard>
+    internal class RestaurantDailyModifierDeck : Deck<RestaurantDailyModifierCard>
     {
-        internal override IEnumerable<RestaurantDailyBonusCard> GetCards()
+        internal override IEnumerable<RestaurantDailyModifierCard> GetCards()
         {
             throw new System.NotImplementedException();
         }
     }
 
-    public class RestaurantDailyBonusCard : Card
+    public class RestaurantDailyModifierCard : Card
     {
 
     }

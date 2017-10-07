@@ -8,12 +8,7 @@ namespace ItsLunchTimeCore.Decks
 {
     internal class PlayerBonusDeck : Deck<PlayerBonusCard>
     {
-        public PlayerBonusDeck()
-        {
-
-        }
-
-        public override IEnumerable<PlayerBonusCard> GetCards()
+        internal override IEnumerable<PlayerBonusCard> GetCards()
         {
             throw new NotImplementedException();
         }

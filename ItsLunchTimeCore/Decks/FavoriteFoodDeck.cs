@@ -7,7 +7,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public const int FOOD_TYPE_CARDS_REPEAT_COUNT = 3;
 
-        public override IEnumerable<FoodCard> GetCards()
+        internal override IEnumerable<FoodCard> GetCards()
         {
             foreach (FoodType type in Enum.GetValues(typeof(FoodType)))
             {

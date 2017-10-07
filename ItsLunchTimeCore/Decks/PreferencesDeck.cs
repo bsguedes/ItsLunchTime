@@ -4,7 +4,7 @@ namespace ItsLunchTimeCore.Decks
 {
     internal class PreferencesDeck : Deck<PreferenceCard>
     {
-        public override IEnumerable<PreferenceCard> GetCards()
+        internal override IEnumerable<PreferenceCard> GetCards()
         {
             yield return new PreferenceCard(Restaurant.Russo, 5, Restaurant.JoeAndLeos, 3, Restaurant.GustoDiBacio, Punishment.TwoVP, Punishment.OneVP);
             yield return new PreferenceCard(Restaurant.Russo, 5, Restaurant.Panorama, 1, Restaurant.Silva, Punishment.TwoVP, Punishment.TwoVP);

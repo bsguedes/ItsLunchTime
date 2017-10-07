@@ -5,11 +5,7 @@ namespace ItsLunchTimeCore
 {
     internal class LoyaltyDeck : Deck<LoyaltyCard>
     {
-        public LoyaltyDeck()
-        {
-        }
-
-        public override IEnumerable<LoyaltyCard> GetCards()
+        internal override IEnumerable<LoyaltyCard> GetCards()
         {
             yield return new LoyaltyCardVIP(Restaurant.Russo, new int[] { 1, 2, 3, 4 }, 1, 1);
             yield return new LoyaltyCardVIP(Restaurant.Palatus, new int[] { 1, 3, 5, 7 }, 1, 1);

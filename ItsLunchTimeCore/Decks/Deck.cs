@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore.Decks
 {
-    public abstract class Deck<T> where T : Card
+    internal abstract class Deck<T> where T : Card
     {
-        public Deck()
+        internal Deck()
         {
             this.Cards = new List<T>();
             this.Cards.AddRange(GetCards());
@@ -17,14 +17,14 @@ namespace ItsLunchTimeCore.Decks
 
         protected List<T> Cards { get; }
 
-        public abstract IEnumerable<T> GetCards();
+        internal abstract IEnumerable<T> GetCards();
 
-        public void Shuffle()
+        internal void Shuffle()
         {
             this.Cards.Shuffle();
         }
 
-        public T Draw()
+        internal T Draw()
         {
             T c = this.Cards[0];
             this.Cards.RemoveAt(0);

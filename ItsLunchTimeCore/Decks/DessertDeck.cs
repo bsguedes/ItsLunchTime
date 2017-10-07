@@ -13,7 +13,7 @@ namespace ItsLunchTimeCore.Decks
             this.DessertCount = count;
         }
 
-        public override IEnumerable<DessertCard> GetCards()
+        internal override IEnumerable<DessertCard> GetCards()
         {
             foreach (DessertType type in Enum.GetValues(typeof(DessertType)))
             {

@@ -4,11 +4,7 @@ namespace ItsLunchTimeCore.Decks
 {
     internal class TeamBonusDeck : Deck<TeamBonusCard>
     {
-        public TeamBonusDeck()
-        {
-        }
-
-        public override IEnumerable<TeamBonusCard> GetCards()
+        internal override IEnumerable<TeamBonusCard> GetCards()
         {
             throw new System.NotImplementedException();
         }

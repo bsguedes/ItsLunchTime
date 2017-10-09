@@ -1,18 +1,7 @@
-﻿using System;
+﻿using BotAgressive;
+using ItsLunchTimeCore;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ItsLunchTime
 {
@@ -24,6 +13,12 @@ namespace ItsLunchTime
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            List<Player> players = new List<Player>() { new AgressiveBot(), new AgressiveBot(), new AgressiveBot() };
+            Game game = new Game(players, DifficultyLevel.Easy);
         }
     }
 }

@@ -65,7 +65,16 @@ namespace ItsLunchTimeCore
 
         private void ScorePlayerBonus()
         {
-            throw new NotImplementedException();
+            foreach(PlayerBonusCard playerBonus in this.PublicBoard.CurrentPlayerBonuses)
+            {
+                foreach(Player player in this.Players)
+                {
+                    if (playerBonus.HasCompletedForPlayer(player, PublicBoard))
+                    {
+
+                    }
+                }
+            }
         }
 
         private void ScoreTeamBonus()

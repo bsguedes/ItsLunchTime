@@ -21,6 +21,11 @@ namespace ItsLunchTimeCore
         public ReadOnlyCollection<FoodType> Menu { get; private set; }
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<Player>> Visitors { get; private set; }
         public RestaurantDailyModifierCard Modifier { get; internal set; }
+
+        internal bool HasPlayerVisited(Player player, DayOfWeek dayOfWeek)
+        {
+            return this.Visitors[dayOfWeek].Contains(player);
+        }
     }
 
     public class Home

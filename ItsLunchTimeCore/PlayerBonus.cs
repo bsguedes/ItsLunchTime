@@ -40,6 +40,25 @@ namespace ItsLunchTimeCore.Decks
         }
     }
 
+    public class LeadATrackAlone : PlayerBonusCard
+    {
+        public override int Points => 4;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            foreach (Restaurant restaurant in Enum.GetValues(typeof(Restaurant)))
+            {
+                RestaurantTrack track = board.RestaurantTracks[restaurant];
+                int playerScore = track.PlayerScores[player];
+                if (track.PlayerScores.Values.Where(x => x >= playerScore).Count() == 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     public class ThreeOnARowSameRestaurant : PlayerBonusCard
     {
         public override int Points => 5;
@@ -64,4 +83,46 @@ namespace ItsLunchTimeCore.Decks
             return false;
         }
     }
+
+    public class NoFoodFromHome : PlayerBonusCard
+    {
+        public override int Points => 3;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            foreach(DayOfWeek day in Extensions.Weekdays)
+            {
+                if (board.Home.HasPlayerVisited(player, day))
+                {
+                    return false;
+                }
+            }
+            return true;            
+        }
+    }
+
+    public class NeverLunchAlone : PlayerBonusCard
+    {
+        public override int Points => 5;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            foreach (DayOfWeek day in Extensions.Weekdays)
+            {
+                if (board.Home.Visitors[day].Contains(player))
+                {
+                    return false;
+                }
+                foreach(RestaurantPlace restaurant in board.Restaurants)
+                {
+                    if (restaurant.Visitors[day].Contains(player) && restaurant.Visitors[day].Count == 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
 }

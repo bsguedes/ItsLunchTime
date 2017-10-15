@@ -38,11 +38,13 @@ namespace ItsLunchTimeCore
         VIP,
         GOLD,
         PLUS
-    }
+    }    
 
     public static class Extensions
     {
         private static Random rng = new Random();
+
+        public static readonly DayOfWeek[] Weekdays = new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
 
         public static void Times(this int n, Action<int> action)
         {

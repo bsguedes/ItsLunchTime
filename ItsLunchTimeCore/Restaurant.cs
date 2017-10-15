@@ -14,13 +14,9 @@ namespace ItsLunchTimeCore
         JoeAndLeos
     }
 
-    public class RestaurantPlace
+    public abstract class Place
     {
-        public string Name { get; private set; }
-        public int Price { get; private set; }
-        public ReadOnlyCollection<FoodType> Menu { get; private set; }
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<Player>> Visitors { get; private set; }
-        public RestaurantDailyModifierCard Modifier { get; internal set; }
 
         internal bool HasPlayerVisited(Player player, DayOfWeek dayOfWeek)
         {
@@ -28,8 +24,17 @@ namespace ItsLunchTimeCore
         }
     }
 
-    public class Home
+    public class RestaurantPlace : Place
     {
-        public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<Player>> Visitors { get; private set; }
+        public string Name { get; private set; }
+        public int Price { get; private set; }
+        public ReadOnlyCollection<FoodType> Menu { get; private set; }        
+        public RestaurantDailyModifierCard Modifier { get; internal set; }
+        
+    }
+
+    public class Home : Place
+    {
+        
     }
 }

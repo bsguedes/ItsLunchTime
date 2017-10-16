@@ -18,7 +18,7 @@ namespace ItsLunchTimeCore
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
         public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
-        public List<PlayerDescriptor> PlayerDescriptors { get; private set; }
+        public ReadOnlyDictionary<Character, PlayerDescriptor> PlayerDescriptors { get; private set; }
 
         public PublicBoard()
         {

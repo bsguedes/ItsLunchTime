@@ -125,4 +125,28 @@ namespace ItsLunchTimeCore.Decks
         }
     }
 
+    public class Eat3TimesChinese : PlayerBonusCard
+    {
+        public override int Points => 4;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
+                .Where(x => x is RestaurantPlace)
+                .Where(y => ((RestaurantPlace)y).Menu.Contains(FoodType.Chinese)).Count() >= 3;
+        }
+    }
+
+    public class WentToFourDistinctRestaurants : PlayerBonusCard
+    {
+        public override int Points => 6;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values.Where(x => !(x is Home)).Distinct().Count() >= 4;
+        }
+    }
+
+
+
 }

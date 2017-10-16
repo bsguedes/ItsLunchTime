@@ -26,7 +26,7 @@ namespace ItsLunchTimeCore
 
     public class RestaurantPlace : Place
     {
-        public string Name { get; private set; }
+        public string Name { get; }        
         public int Price { get; private set; }
         public ReadOnlyCollection<FoodType> Menu { get; private set; }        
         public RestaurantDailyModifierCard Modifier { get; internal set; }

@@ -46,13 +46,15 @@ namespace ItsLunchTimeCore
 
         public static readonly DayOfWeek[] Weekdays = new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
 
+        public static readonly IEnumerable<Restaurant> Restaurants = new Restaurant[] { Restaurant.Russo, Restaurant.Palatus, Restaurant.GustoDiBacio, Restaurant.Silva, Restaurant.Panorama, Restaurant.JoeAndLeos };
+
         public static void Times(this int n, Action<int> action)
         {
             for (int i = 0; i < n; i++)
             {
                 action(i);
             }
-        }
+        }        
 
         public static void Times(this int n, Action action)
         {

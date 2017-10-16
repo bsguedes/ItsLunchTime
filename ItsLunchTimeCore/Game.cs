@@ -155,9 +155,9 @@ namespace ItsLunchTimeCore
 
         private void RevealDailyModifiers()
         {            
-            foreach(RestaurantPlace rest in PublicBoard.Restaurants)
+            foreach(Restaurant restaurant in Extensions.Restaurants)
             {
-                rest.Modifier = this.RestaurantDailyModifierDeck.Draw();
+                PublicBoard.Restaurants[restaurant].Modifier = this.RestaurantDailyModifierDeck.Draw();
             }
         }
 

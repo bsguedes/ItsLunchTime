@@ -208,4 +208,62 @@ namespace ItsLunchTimeCore.Decks
             return foodTypes.Values.Contains(Extensions.Weekdays.Count());
         }
     }
+
+    public class NeverEatTwiceInARowSameRestaurant : PlayerBonusCard
+    {
+        public override int Points => 6;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            PlayerDescriptor descriptor = board.PlayerDescriptors[player.Character];
+
+            Place monday = descriptor.VisitedPlaces[DayOfWeek.Monday];
+            Place tuesday = descriptor.VisitedPlaces[DayOfWeek.Tuesday];
+            Place wednesday = descriptor.VisitedPlaces[DayOfWeek.Wednesday];
+            Place thursday = descriptor.VisitedPlaces[DayOfWeek.Thursday];
+            Place friday = descriptor.VisitedPlaces[DayOfWeek.Friday];
+
+            if (monday is RestaurantPlace && tuesday is RestaurantPlace && monday == tuesday)
+            {
+                return false;
+            }
+            if (tuesday is RestaurantPlace && wednesday is RestaurantPlace && tuesday == wednesday)
+            {
+                return false;
+            }
+            if (wednesday is RestaurantPlace && thursday is RestaurantPlace && wednesday == thursday)
+            {
+                return false;
+            }
+            if (thursday is RestaurantPlace && friday is RestaurantPlace && thursday == friday)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    public class MissedMajorityAtMaxOnce : PlayerBonusCard
+    {
+        public override int Points => 5;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            int majorities = 0;
+            int playerInMajority = 0;
+            foreach(DayOfWeek day in Extensions.Weekdays)
+            {
+                if (board.HasMajority(day))
+                {
+                    majorities++;
+                    if (board.IsPlayerInMajority(day, player))
+                    {
+                        playerInMajority++;
+                    }
+                }
+            }
+            return majorities - playerInMajority <= 1;
+        }
+    }
 }

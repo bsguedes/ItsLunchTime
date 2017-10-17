@@ -182,4 +182,27 @@ namespace ItsLunchTimeCore.Decks
         }
     }
 
+    public class AllEatAllFoodAtLeastTwice : TeamBonusCard
+    {
+        internal override bool HasCompletedTeamBonus(PublicBoard board)
+        {
+            Dictionary<PlayerDescriptor, Dictionary<FoodType, int>> dictionary = new Dictionary<PlayerDescriptor, Dictionary<FoodType, int>>();
+            foreach(PlayerDescriptor player in board.PlayerDescriptors.Values)
+            {
+                dictionary.Add(player, new Dictionary<FoodType, int>());
+                foreach(FoodType food in Extensions.FoodTypes)
+                {
+                    dictionary[player].Add(food, 0);
+                }
+                foreach(DayOfWeek day in Extensions.Weekdays)
+                {
+                    foreach (FoodType food in board.PlayerDescriptors[player.Character].VisitedPlaces[day].Menu)
+                    {
+                        dictionary[player][food]++;
+                    }
+                }
+            }
+            return dictionary.All(x => x.Value.All(y => y.Value >= 2));
+        }
+    }
 }

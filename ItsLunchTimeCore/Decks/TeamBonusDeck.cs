@@ -8,7 +8,18 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override IEnumerable<TeamBonusCard> GetCards()
         {
-            throw new System.NotImplementedException();
+            yield return new NoPriceIncreasedThisWeek();
+            yield return new NoMajorityInPastaRestaurant();
+            yield return new NoMajorityInVegetarianRestaurant();
+            yield return new NoOneAteFromHome();
+            yield return new WentOnceToUndesired();
+            yield return new AllEatBurgerAndPizzaThreeTimes();
+            yield return new AllEatBrazilianAndChineseThreeTimes();
+            yield return new AllParticipatedIn2Majorities();
+            yield return new NoMoreThan1MajorityInARestaurant();
+            yield return new NoMoreThan15CashDifference();
+            yield return new AllEatAllFoodAtLeastTwice();
+            yield return new CollectivelyDonate7Cash();
         }
     }
 
@@ -203,6 +214,39 @@ namespace ItsLunchTimeCore.Decks
                 }
             }
             return dictionary.All(x => x.Value.All(y => y.Value >= 2));
+        }
+    }
+
+    public class CollectivelyDonate7Cash : TeamBonusCard
+    {
+        List<Player> _players;        
+
+        internal void SetPlayers(List<Player> players)
+        {
+            this._players = players;
+        }
+
+        internal override bool HasCompletedTeamBonus(PublicBoard board)
+        {
+            Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> _opinion = new Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>>();
+            _players.ForEach(player =>
+           {
+               _opinion.Add(player.Descriptor, player.AskOpinionForDonationTeamObjective(board));
+           });
+
+            Dictionary<PlayerDescriptor, int> _intents = new Dictionary<PlayerDescriptor, int>();
+            _players.ForEach(player =>
+            {
+                _intents.Add(player.Descriptor, player.AskForDonationTeamObjectiveIntent(board, _opinion));
+            });
+
+            Dictionary<PlayerDescriptor, int> _response = new Dictionary<PlayerDescriptor, int>();
+            _players.ForEach(player =>
+            {
+                _response.Add(player.Descriptor, player.AskForDonationTeamObjective(board, _opinion, _intents));
+            });
+
+            return _response.Values.Sum() >= 7;
         }
     }
 }

@@ -32,6 +32,9 @@ namespace ItsLunchTimeCore
         public abstract FoodCard AskFavoriteFood();
         public abstract PreferenceCard AskPreferences();
         public abstract LoyaltyCard AskLoyalty();
+        public abstract Dictionary<PlayerDescriptor, int> AskOpinionForDonationTeamObjective(PublicBoard board);
+        public abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion);
+        public abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion, Dictionary<PlayerDescriptor, int> intents);
 
         internal PlayerDescriptor Descriptor
         {
@@ -40,7 +43,7 @@ namespace ItsLunchTimeCore
                 throw new NotImplementedException();
             }
         }
-        
+
     }
 
     public class PlayerDescriptor

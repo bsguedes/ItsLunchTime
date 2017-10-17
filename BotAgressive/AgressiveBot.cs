@@ -1,6 +1,7 @@
 ﻿using ItsLunchTimeCore;
 using ItsLunchTimeCore.Decks;
 using System;
+using System.Collections.Generic;
 
 namespace BotAgressive
 {
@@ -11,7 +12,22 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
+        public override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion, Dictionary<PlayerDescriptor, int> intents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion)
+        {
+            throw new NotImplementedException();
+        }
+
         public override LoyaltyCard AskLoyalty()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Dictionary<PlayerDescriptor, int> AskOpinionForDonationTeamObjective(PublicBoard board)
         {
             throw new NotImplementedException();
         }

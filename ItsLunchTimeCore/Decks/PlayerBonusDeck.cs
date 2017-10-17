@@ -10,7 +10,18 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override IEnumerable<PlayerBonusCard> GetCards()
         {
-            throw new NotImplementedException();
+            yield return new LastInATrackAlone();
+            yield return new LeadATrackAlone();
+            yield return new ThreeOnARowSameRestaurant();
+            yield return new NoFoodFromHome();
+            yield return new NeverLunchAlone();
+            yield return new Eat3TimesChinese();
+            yield return new WentToFourDistinctRestaurants();
+            yield return new HadBeenPartOfMajority3Times();
+            yield return new NoBrazilianFood();
+            yield return new EatSameTypeOfFood5Times();
+            yield return new NeverEatTwiceInARowSameRestaurant();
+            yield return new MissedMajorityAtMaxOnce();
         }
     }
 

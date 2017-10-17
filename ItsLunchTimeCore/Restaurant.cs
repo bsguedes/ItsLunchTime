@@ -16,9 +16,10 @@ namespace ItsLunchTimeCore
 
     public abstract class Place
     {
-        public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<Player>> Visitors { get; private set; }
+        public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> Visitors { get; private set; }
+        public ReadOnlyCollection<FoodType> Menu { get; private set; }
 
-        internal bool HasPlayerVisited(Player player, DayOfWeek dayOfWeek)
+        internal bool HasPlayerVisited(PlayerDescriptor player, DayOfWeek dayOfWeek)
         {
             return this.Visitors[dayOfWeek].Contains(player);
         }
@@ -28,9 +29,8 @@ namespace ItsLunchTimeCore
     {
         public string Name { get; }        
         public int Price { get; private set; }
-        public ReadOnlyCollection<FoodType> Menu { get; private set; }        
-        public RestaurantDailyModifierCard Modifier { get; internal set; }
-        
+        public Restaurant RestaurantIdentifier { get; }        
+        public RestaurantDailyModifierCard Modifier { get; internal set; }        
     }
 
     public class Home : Place

@@ -32,15 +32,24 @@ namespace ItsLunchTimeCore
         public abstract FoodCard AskFavoriteFood();
         public abstract PreferenceCard AskPreferences();
         public abstract LoyaltyCard AskLoyalty();
+
+        internal PlayerDescriptor Descriptor
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
         
     }
 
     public class PlayerDescriptor
     {
         public Character Character { get; private set; }
-        public FoodCard FoodCard { get; private set; }
+        public FoodCard FoodCard { get; private set; }        
         public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }
         private Dictionary<DayOfWeek, Place> _internalVisitedPlaces = new Dictionary<DayOfWeek, Place>();
+        internal Restaurant UndesiredRestaurant { get; private set; }
 
         public PlayerDescriptor()
         {

@@ -11,7 +11,7 @@ namespace ItsLunchTimeCore
 
     public class RestaurantTrack
     {
-        public ReadOnlyDictionary<Player, int> PlayerScores { get; private set; }
+        public ReadOnlyDictionary<PlayerDescriptor, int> PlayerScores { get; private set; }
         internal Dictionary<int, RestaurantTrackRewardDelegate> Rewards { get; private set; }
     }
 }

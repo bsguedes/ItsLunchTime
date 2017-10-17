@@ -52,7 +52,7 @@
     <Compile Include="Decks\PreferencesDeck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Restaurant.cs" />
-    <Compile Include="PlayerBonus.cs" />
+    <Compile Include="Decks\PlayerBonusDeck.cs" />
     <Compile Include="Decks\RestaurantDailyBonusDeck.cs" />
     <Compile Include="RestaurantTrack.cs" />
     <Compile Include="Decks\TeamBonusDeck.cs" />

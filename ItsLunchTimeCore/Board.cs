@@ -16,7 +16,7 @@ namespace ItsLunchTimeCore
         public Home Home { get; }
 
         public ReadOnlyDictionary<Restaurant, RestaurantPlace> Restaurants { get; }
-        public ReadOnlyDictionary<Player, int> PlayerScores { get; }
+        public ReadOnlyDictionary<PlayerDescriptor, int> PlayerScores { get; }
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
         public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
         public ReadOnlyDictionary<Character, PlayerDescriptor> PlayerDescriptors { get; private set; }
@@ -46,7 +46,7 @@ namespace ItsLunchTimeCore
             return RestaurantWithMajority(day) != null;
         }
 
-        internal bool IsPlayerInMajority(DayOfWeek day, Player player)
+        internal bool IsPlayerInMajority(DayOfWeek day, PlayerDescriptor player)
         {
             Restaurant? majorityRestaurant = RestaurantWithMajority(day);
             return majorityRestaurant != null ? Restaurants[majorityRestaurant.Value].Visitors[day].Contains(player) : false;

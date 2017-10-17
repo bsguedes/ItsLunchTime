@@ -29,14 +29,14 @@ namespace ItsLunchTimeCore.Decks
     {
         public abstract int Points { get; }
 
-        internal abstract bool HasCompletedForPlayer(Player player, PublicBoard board);
+        internal abstract bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board);
     }
 
     public class LastInATrackAlone : PlayerBonusCard
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             foreach(Restaurant restaurant in Enum.GetValues(typeof(Restaurant)))
             {
@@ -55,7 +55,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             foreach (Restaurant restaurant in Enum.GetValues(typeof(Restaurant)))
             {
@@ -74,7 +74,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             foreach(Restaurant restaurant in Extensions.Restaurants)
             {
@@ -105,7 +105,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 3;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             foreach(DayOfWeek day in Extensions.Weekdays)
             {
@@ -122,7 +122,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             foreach (DayOfWeek day in Extensions.Weekdays)
             {
@@ -146,7 +146,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
                 .Where(x => x is RestaurantPlace)
@@ -158,7 +158,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 6;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             return board.PlayerDescriptors[player.Character].VisitedPlaces.Values.Where(x => !(x is Home)).Distinct().Count() >= 4;
         }
@@ -168,7 +168,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             int majorities = 0;
             foreach (DayOfWeek day in Extensions.Weekdays)
@@ -186,7 +186,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
                 .Where(x => x is RestaurantPlace)
@@ -198,7 +198,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             Dictionary<FoodType, int> foodTypes = new Dictionary<FoodType, int>();
             foreach (FoodType type in Extensions.FoodTypes)
@@ -224,7 +224,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 6;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             PlayerDescriptor descriptor = board.PlayerDescriptors[player.Character];
 
@@ -259,7 +259,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
             int majorities = 0;
             int playerInMajority = 0;

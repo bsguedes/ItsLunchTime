@@ -69,7 +69,7 @@ namespace ItsLunchTimeCore
             {
                 foreach(Player player in this.Players)
                 {
-                    if (playerBonus.HasCompletedForPlayer(player, PublicBoard))
+                    if (playerBonus.HasCompletedForPlayer(player.Descriptor, PublicBoard))
                     {
 
                     }

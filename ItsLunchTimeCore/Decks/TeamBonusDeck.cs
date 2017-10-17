@@ -152,4 +152,34 @@ namespace ItsLunchTimeCore.Decks
             return status.Values.All(x => x >= 2);
         }
     }
+
+    public class NoMoreThan1MajorityInARestaurant : TeamBonusCard
+    {
+        internal override bool HasCompletedTeamBonus(PublicBoard board)
+        {
+            Dictionary<Restaurant, int> majorities = new Dictionary<Restaurant, int>();
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                majorities.Add(restaurant, 0);                
+            }
+            foreach (DayOfWeek day in Extensions.Weekdays)
+            {
+                if (board.HasMajority(day))
+                {
+                    majorities[board.RestaurantWithMajority(day).Value]++;
+                }
+            }
+            return majorities.Values.All(x => x <= 1);
+        }
+    }
+
+    public class NoMoreThan15CashDifference : TeamBonusCard
+    {
+        internal override bool HasCompletedTeamBonus(PublicBoard board)
+        {
+            IEnumerable<int> cash = board.PlayerDescriptors.Values.Select(x => x.CurrentCash);
+            return cash.Max() - cash.Min() <= 15;
+        }
+    }
+
 }

@@ -171,4 +171,41 @@ namespace ItsLunchTimeCore.Decks
         }
     }
 
+    public class NoBrazilianFood : PlayerBonusCard
+    {
+        public override int Points => 4;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
+                .Where(x => x is RestaurantPlace)
+                .Where(y => ((RestaurantPlace)y).Menu.Contains(FoodType.Brazilian)).Count() == 0;
+        }
+    }
+
+    public class EatSameTypeOfFood5Times : PlayerBonusCard
+    {
+        public override int Points => 5;
+
+        internal override bool HasCompletedForPlayer(Player player, PublicBoard board)
+        {
+            Dictionary<FoodType, int> foodTypes = new Dictionary<FoodType, int>();
+            foreach (FoodType type in Extensions.FoodTypes)
+            {
+                foodTypes.Add(type, 0);
+            }
+            foreach (DayOfWeek day in Extensions.Weekdays)
+            {
+                Place place = board.PlayerDescriptors[player.Character].VisitedPlaces[day];
+                if (place is RestaurantPlace)
+                {
+                    foreach(FoodType foodType in (place as RestaurantPlace).Menu)
+                    {
+                        foodTypes[foodType]++;
+                    }
+                }
+            }
+            return foodTypes.Values.Contains(Extensions.Weekdays.Count());
+        }
+    }
 }

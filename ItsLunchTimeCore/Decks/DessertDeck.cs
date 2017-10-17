@@ -15,7 +15,7 @@ namespace ItsLunchTimeCore.Decks
 
         internal override IEnumerable<DessertCard> GetCards()
         {
-            foreach (DessertType type in Enum.GetValues(typeof(DessertType)))
+            foreach (DessertType type in Extensions.DessertTypes)
             {
                 for (int i = 0; i < DessertCount; i++)
                 {

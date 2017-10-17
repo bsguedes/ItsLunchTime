@@ -38,7 +38,7 @@ namespace ItsLunchTimeCore.Decks
 
         internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
-            foreach(Restaurant restaurant in Enum.GetValues(typeof(Restaurant)))
+            foreach(Restaurant restaurant in Extensions.Restaurants)
             {
                 RestaurantTrack track = board.RestaurantTracks[restaurant];
                 int playerScore = track.PlayerScores[player];
@@ -57,7 +57,7 @@ namespace ItsLunchTimeCore.Decks
 
         internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
         {
-            foreach (Restaurant restaurant in Enum.GetValues(typeof(Restaurant)))
+            foreach (Restaurant restaurant in Extensions.Restaurants)
             {
                 RestaurantTrack track = board.RestaurantTracks[restaurant];
                 int playerScore = track.PlayerScores[player];

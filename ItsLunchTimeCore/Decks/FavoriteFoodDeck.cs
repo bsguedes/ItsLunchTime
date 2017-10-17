@@ -9,7 +9,7 @@ namespace ItsLunchTimeCore.Decks
 
         internal override IEnumerable<FoodCard> GetCards()
         {
-            foreach (FoodType type in Enum.GetValues(typeof(FoodType)))
+            foreach (FoodType type in Extensions.FoodTypes)
             {
                 for (int i = 0; i < FOOD_TYPE_CARDS_REPEAT_COUNT; i++)
                 {

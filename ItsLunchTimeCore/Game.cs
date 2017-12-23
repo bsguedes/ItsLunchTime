@@ -1,7 +1,7 @@
 ﻿using ItsLunchTimeCore.Decks;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace ItsLunchTimeCore
 {
@@ -46,8 +46,7 @@ namespace ItsLunchTimeCore
 
                DAYS_IN_WEEK.Times(day =>
               {
-                  ChooseRestaurant();
-                  RevealChoices();
+                  ChooseRestaurant(day);                  
                   AdvanceRestaurantTracks();
                   PayForLunchAndSetMarkers();
                   ScoreTeamPoints();
@@ -119,12 +118,35 @@ namespace ItsLunchTimeCore
 
         private void RevealChoices()
         {
-            throw new NotImplementedException();
+            
         }
 
-        private void ChooseRestaurant()
+        private void ChooseRestaurant(int day)
         {
-            
+            List<PreferenceHistogram> last = null;
+            for (int i = 0; i < 3; i++)
+            {
+                List<PreferenceHistogram> curr = new List<PreferenceHistogram>();
+                this.Players.ForEach(player =>
+                {
+                    PreferenceHistogram pref = player.GetPreferenceHistogram(i, last);
+                    pref.Player = player.Descriptor;
+                    curr.Add(pref);
+                });
+                last = curr;
+            }
+            foreach (PreferenceHistogram pref in last)
+            {
+                Place choice = pref.Preferences.FirstOrDefault(x => x.Value == pref.Preferences.Values.Max()).Key;
+                if (choice is Home)
+                {
+                    this.PublicBoard.Home.VisitPlace(pref.Player, Extensions.Weekdays[day]);
+                }
+                else
+                {
+                    this.PublicBoard.Restaurants[(choice as RestaurantPlace).RestaurantIdentifier].VisitPlace(pref.Player, Extensions.Weekdays[day]);
+                }
+            }
         }
 
         private void ChooseRestaurantPreferences()

@@ -42,6 +42,11 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
+        public override PreferenceHistogram GetPreferenceHistogram(int i, List<PreferenceHistogram> last)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void GiveFoodCard(FoodCard foodCard)
         {
             throw new NotImplementedException();

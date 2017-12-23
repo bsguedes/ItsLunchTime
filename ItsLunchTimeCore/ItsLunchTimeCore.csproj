@@ -50,6 +50,7 @@
     <Compile Include="Decks\LoyaltyDeck.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Decks\PreferencesDeck.cs" />
+    <Compile Include="PreferenceHistogram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Restaurant.cs" />
     <Compile Include="Decks\PlayerBonusDeck.cs" />

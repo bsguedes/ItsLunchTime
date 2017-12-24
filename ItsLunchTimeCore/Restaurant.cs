@@ -36,6 +36,7 @@ namespace ItsLunchTimeCore
         internal void VisitPlace(PlayerDescriptor player, DayOfWeek dow)
         {
             this._list_visitors[dow].Add(player);
+            player.VisitPlace(dow, this);
         }
 
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> Visitors { get; private set; }

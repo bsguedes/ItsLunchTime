@@ -37,6 +37,11 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
+        public override DessertCard ChooseDessert(List<DessertCard> cards)
+        {
+            throw new NotImplementedException();
+        }
+
         public override TeamBonusCard ChooseOneTeamBonus(TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2)
         {
             throw new NotImplementedException();

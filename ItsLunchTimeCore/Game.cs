@@ -47,7 +47,7 @@ namespace ItsLunchTimeCore
                DAYS_IN_WEEK.Times(day =>
               {
                   ChooseRestaurant(day);                  
-                  AdvanceRestaurantTracks();
+                  AdvanceRestaurantTracks(day);
                   PayForLunchAndSetMarkers();
                   ScoreTeamPoints();
                   ScoreDailyModifiers();
@@ -111,16 +111,23 @@ namespace ItsLunchTimeCore
             throw new NotImplementedException();
         }
 
-        private void AdvanceRestaurantTracks()
+        private void AdvanceRestaurantTracks(int day)
         {
-            throw new NotImplementedException();
+            this.Players.ForEach(player => 
+            {
+                Place place = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
+                if (place is RestaurantPlace)
+                {
+                    if (this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].AdvancePlayer(player.Descriptor))
+                    {
+                        List<DessertCard> cards = new List<DessertCard>();
+                        this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
+                        DessertCard choosenCard = player.ChooseDessert(cards);
+                    }                    
+                }
+            });
         }
-
-        private void RevealChoices()
-        {
-            
-        }
-
+        
         private void ChooseRestaurant(int day)
         {
             List<PreferenceHistogram> last = null;

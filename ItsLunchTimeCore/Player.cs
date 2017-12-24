@@ -36,6 +36,7 @@ namespace ItsLunchTimeCore
         public abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion);
         public abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion, Dictionary<PlayerDescriptor, int> intents);
         public abstract PreferenceHistogram GetPreferenceHistogram(int i, List<PreferenceHistogram> last);
+        public abstract DessertCard ChooseDessert(List<DessertCard> cards);
 
         internal PlayerDescriptor Descriptor
         {

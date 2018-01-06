@@ -19,6 +19,7 @@ namespace ItsLunchTimeCore
         internal RestaurantDailyModifierDeck RestaurantDailyModifierDeck { get; }
         internal DessertDeck DessertDeck { get; }
 
+        internal Dictionary<Player, List<DessertCard>> DessertsPerPlayer { get; set; }
         internal List<Player> Players { get; }
 
         public Game( List<Player> players, DifficultyLevel difficulty )
@@ -34,6 +35,8 @@ namespace ItsLunchTimeCore
             PlayerBonusDeck = new PlayerBonusDeck();
             RestaurantDailyModifierDeck = new RestaurantDailyModifierDeck();
             DessertDeck = new DessertDeck(players.Count);
+            DessertsPerPlayer = new Dictionary<Player, List<DessertCard>>();
+            Players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
 
             MAX_WEEKS.Times(turn_index =>
            {
@@ -122,7 +125,8 @@ namespace ItsLunchTimeCore
                     {
                         List<DessertCard> cards = new List<DessertCard>();
                         this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
-                        DessertCard choosenCard = player.ChooseDessert(cards);
+                        DessertCard chosenCard = player.ChooseDessert(cards);
+                        DessertsPerPlayer[player].Add(chosenCard);
                     }                    
                 }
             });

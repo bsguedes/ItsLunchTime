@@ -15,6 +15,7 @@ namespace ItsLunchTimeCore
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
         public Home Home { get; }
 
+        private Dictionary<Restaurant, RestaurantPlace> _restaurants;
         public ReadOnlyDictionary<Restaurant, RestaurantPlace> Restaurants { get; }
         public ReadOnlyDictionary<PlayerDescriptor, int> PlayerScores { get; }
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
@@ -38,7 +39,17 @@ namespace ItsLunchTimeCore
 
         public PublicBoard()
         {
-            
+            this.Home = new Home();
+            this._restaurants = new Dictionary<Restaurant, RestaurantPlace>
+            {
+                { Restaurant.Russo, new RestaurantPlace(2) },
+                { Restaurant.Palatus, new RestaurantPlace(3) },
+                { Restaurant.GustoDiBacio, new RestaurantPlace(4) },
+                { Restaurant.Silva, new RestaurantPlace(4) },
+                { Restaurant.Panorama, new RestaurantPlace(5) },
+                { Restaurant.JoeAndLeos, new RestaurantPlace(6) }
+            };
+            this.Restaurants = new ReadOnlyDictionary<Restaurant, RestaurantPlace>(_restaurants);
         }
 
         internal bool HasMajority(DayOfWeek day)

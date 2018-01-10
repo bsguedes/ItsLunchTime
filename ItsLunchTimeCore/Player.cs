@@ -46,6 +46,10 @@ namespace ItsLunchTimeCore
             }
         }
 
+        internal void AddMoney(int v)
+        {
+            this.Descriptor.CurrentCash += v;
+        }
     }
 
     public class PlayerDescriptor
@@ -55,7 +59,7 @@ namespace ItsLunchTimeCore
         public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }
         private Dictionary<DayOfWeek, Place> _internalVisitedPlaces = new Dictionary<DayOfWeek, Place>();
         internal Restaurant UndesiredRestaurant { get; private set; }
-        public int CurrentCash { get; private set; }
+        public int CurrentCash { get; internal set; }
 
         public PlayerDescriptor()
         {

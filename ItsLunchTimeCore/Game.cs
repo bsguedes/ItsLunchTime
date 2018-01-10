@@ -51,7 +51,7 @@ namespace ItsLunchTimeCore
               {
                   ChooseRestaurant(day);                  
                   AdvanceRestaurantTracks(day);
-                  PayForLunchAndSetMarkers();
+                  PayForLunchAndSetMarkers(day);
                   ScoreTeamPoints();
                   ScoreDailyModifiers();
                   ScoreVPs();
@@ -109,9 +109,12 @@ namespace ItsLunchTimeCore
             throw new NotImplementedException();
         }
 
-        private void PayForLunchAndSetMarkers()
+        private void PayForLunchAndSetMarkers(int day)
         {
-            throw new NotImplementedException();
+            Players.ForEach(player =>
+            {
+                player.AddMoney(-player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]].Cost);
+            });
         }
 
         private void AdvanceRestaurantTracks(int day)

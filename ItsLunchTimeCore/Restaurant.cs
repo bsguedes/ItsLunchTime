@@ -20,8 +20,9 @@ namespace ItsLunchTimeCore
         private Dictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> _visitors;
         private Dictionary<DayOfWeek, List<PlayerDescriptor>> _list_visitors;
 
-        internal Place()
+        internal Place(int cost)
         {
+            this.Cost = cost;
             this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>>();
             this._list_visitors = new Dictionary<DayOfWeek, List<PlayerDescriptor>>();
             Visitors = new ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>>(_visitors);
@@ -41,6 +42,7 @@ namespace ItsLunchTimeCore
 
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> Visitors { get; private set; }
         public ReadOnlyCollection<FoodType> Menu { get; private set; }
+        public int Cost { get; }
 
         internal bool HasPlayerVisited(PlayerDescriptor player, DayOfWeek dayOfWeek)
         {
@@ -50,6 +52,11 @@ namespace ItsLunchTimeCore
 
     public class RestaurantPlace : Place
     {
+        internal RestaurantPlace(int cost) : base(cost)
+        {
+
+        }
+
         public string Name { get; }        
         public int Price { get; private set; }
         public Restaurant RestaurantIdentifier { get; }        
@@ -58,6 +65,9 @@ namespace ItsLunchTimeCore
 
     public class Home : Place
     {
-        
+        internal Home() : base(0)
+        {
+
+        }
     }
 }

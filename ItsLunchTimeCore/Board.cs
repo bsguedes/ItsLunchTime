@@ -2,16 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
     public class PublicBoard
     {
         public int CurrentDay { get; private set; }
-        public int TeamScore { get; private set; }
+        public int TeamScore { get; internal set; }
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
         public Home Home { get; }
 
@@ -31,7 +28,7 @@ namespace ItsLunchTimeCore
                     case 3: return 2;
                     case 4: return 3;
                     case 5: return 3;
-                    case 6: return 4;                        
+                    case 6: return 4;
                 }
                 return 0;
             }
@@ -57,6 +54,30 @@ namespace ItsLunchTimeCore
             return RestaurantWithMajority(day) != null;
         }
 
+        internal bool HasUnanimity(DayOfWeek day)
+        {
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                if (Restaurants[restaurant].Visitors[day].Count == PlayerDescriptors.Count)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal bool HasSomeoneAlone(DayOfWeek day)
+        {
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                if (Restaurants[restaurant].Visitors[day].Count == 1)
+                {
+                    return true;
+                }
+            }
+            return Home.Visitors.Count > 0;
+        }
+
         internal bool IsPlayerInMajority(DayOfWeek day, PlayerDescriptor player)
         {
             Restaurant? majorityRestaurant = RestaurantWithMajority(day);
@@ -79,5 +100,7 @@ namespace ItsLunchTimeCore
         {
             this.CurrentPlayerBonuses = new ReadOnlyCollection<PlayerBonusCard>(bonuses);
         }
+
+
     }
 }

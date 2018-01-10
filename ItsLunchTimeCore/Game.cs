@@ -22,12 +22,12 @@ namespace ItsLunchTimeCore
         internal Dictionary<Player, List<DessertCard>> DessertsPerPlayer { get; set; }
         internal List<Player> Players { get; }
 
-        public Game( List<Player> players, DifficultyLevel difficulty )
+        public Game(List<Player> players, DifficultyLevel difficulty)
         {
             this.Players = players;
 
             PublicBoard = new PublicBoard();
-            
+
             FoodDeck = new FavoriteFoodDeck();
             LoyaltyDeck = new LoyaltyDeck();
             PreferencesDeck = new PreferencesDeck();
@@ -49,10 +49,10 @@ namespace ItsLunchTimeCore
 
                DAYS_IN_WEEK.Times(day =>
               {
-                  ChooseRestaurant(day);                  
+                  ChooseRestaurant(day);
                   AdvanceRestaurantTracks(day);
                   PayForLunchAndSetMarkers(day);
-                  ScoreTeamPoints();
+                  ScoreTeamPoints(day);
                   ScoreDailyModifiers();
                   ScoreVPs();
               });
@@ -67,9 +67,9 @@ namespace ItsLunchTimeCore
 
         private void ScorePlayerBonus()
         {
-            foreach(PlayerBonusCard playerBonus in this.PublicBoard.CurrentPlayerBonuses)
+            foreach (PlayerBonusCard playerBonus in this.PublicBoard.CurrentPlayerBonuses)
             {
-                foreach(Player player in this.Players)
+                foreach (Player player in this.Players)
                 {
                     if (playerBonus.HasCompletedForPlayer(player.Descriptor, PublicBoard))
                     {
@@ -104,9 +104,23 @@ namespace ItsLunchTimeCore
             throw new NotImplementedException();
         }
 
-        private void ScoreTeamPoints()
+        private void ScoreTeamPoints(int day)
         {
-            throw new NotImplementedException();
+            int net_score = 0;
+            net_score += 1 * (PublicBoard.HasMajority(Extensions.Weekdays[day]) ? 1 : -1);
+            if (PublicBoard.HasUnanimity(Extensions.Weekdays[day]))
+            {
+                net_score++;
+            }
+            if (PublicBoard.HasSomeoneAlone(Extensions.Weekdays[day]))
+            {
+                net_score--;
+            }
+            PublicBoard.TeamScore += net_score;
+            if (PublicBoard.TeamScore < 0)
+            {
+                PublicBoard.TeamScore = 0;
+            }
         }
 
         private void PayForLunchAndSetMarkers(int day)
@@ -119,7 +133,7 @@ namespace ItsLunchTimeCore
 
         private void AdvanceRestaurantTracks(int day)
         {
-            this.Players.ForEach(player => 
+            this.Players.ForEach(player =>
             {
                 Place place = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
                 if (place is RestaurantPlace)
@@ -130,11 +144,11 @@ namespace ItsLunchTimeCore
                         this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
                         DessertCard chosenCard = player.ChooseDessert(cards);
                         DessertsPerPlayer[player].Add(chosenCard);
-                    }                    
+                    }
                 }
             });
         }
-        
+
         private void ChooseRestaurant(int day)
         {
             List<PreferenceHistogram> last = null;
@@ -190,8 +204,8 @@ namespace ItsLunchTimeCore
         }
 
         private void RevealDailyModifiers()
-        {            
-            foreach(Restaurant restaurant in Extensions.Restaurants)
+        {
+            foreach (Restaurant restaurant in Extensions.Restaurants)
             {
                 PublicBoard.Restaurants[restaurant].Modifier = this.RestaurantDailyModifierDeck.Draw();
             }
@@ -222,7 +236,7 @@ namespace ItsLunchTimeCore
             {
                 list.Add(this.PlayerBonusDeck.Draw());
             }
-            PublicBoard.SetNewPlayerBonuses(list);            
+            PublicBoard.SetNewPlayerBonuses(list);
         }
     }
 }

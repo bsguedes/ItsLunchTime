@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace ItsLunchTimeCore
 {
@@ -83,6 +84,12 @@ namespace ItsLunchTimeCore
                 }
             }
             return Home.Visitors.Count > 0;
+        }
+
+        internal bool RestaurantHasModifierForThisDay<T>(Restaurant restaurant, DayOfWeek day)
+            where T : RestaurantDailyModifierCard
+        {
+            return Restaurants[restaurant].Modifier is T && Restaurants[restaurant].Modifier.Days.Contains(day);
         }
 
         internal bool IsPlayerInMajority(DayOfWeek day, PlayerDescriptor player)

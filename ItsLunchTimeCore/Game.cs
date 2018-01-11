@@ -139,7 +139,22 @@ namespace ItsLunchTimeCore
         {
             Players.ForEach(player =>
             {
-                player.AddMoney(-player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]].Cost);
+                int cost = 0;
+                Place visitedPlace = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
+                if (visitedPlace is RestaurantPlace)
+                {
+                    RestaurantPlace restaurant = visitedPlace as RestaurantPlace;
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarIncrease>(restaurant.RestaurantIdentifier, Extensions.Weekdays[day]))
+                    {
+                        cost++;
+                    }
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarDiscount>(restaurant.RestaurantIdentifier, Extensions.Weekdays[day]))
+                    {
+                        cost--;
+                    }
+                    cost += restaurant.Cost;
+                }
+                player.AddMoney(-cost);
             });
         }
 
@@ -148,7 +163,8 @@ namespace ItsLunchTimeCore
             this.Players.ForEach(player =>
             {
                 Place place = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
-                if (place is RestaurantPlace)
+                if (place is RestaurantPlace &&
+                    !PublicBoard.RestaurantHasModifierForThisDay<DoesNotAdvanceTrackPlus2VictoryPoints>((place as RestaurantPlace).RestaurantIdentifier, Extensions.Weekdays[day]))
                 {
                     if (this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].AdvancePlayer(player.Descriptor))
                     {

@@ -22,11 +22,19 @@ namespace ItsLunchTimeCore
         internal Dictionary<Player, List<DessertCard>> DessertsPerPlayer { get; set; }
         internal List<Player> Players { get; }
 
+        Dictionary<Player, FoodType> _favoriteFood;
+        Dictionary<Player, PreferenceCard> _preferenceCards;
+        Dictionary<Player, LoyaltyCard> _loyaltyCards;
+        Dictionary<Player, List<DessertType>> _dessertCards;
+
+
         public Game(List<Player> players, DifficultyLevel difficulty)
         {
             this.Players = players;
+            this._dessertCards = new Dictionary<Player, List<DessertType>>();
+            players.ForEach(player => _dessertCards.Add(player, new List<DessertType>()));
 
-            PublicBoard = new PublicBoard();
+            PublicBoard = new PublicBoard(players);
 
             FoodDeck = new FavoriteFoodDeck();
             LoyaltyDeck = new LoyaltyDeck();
@@ -40,6 +48,10 @@ namespace ItsLunchTimeCore
 
             MAX_WEEKS.Times(turn_index =>
            {
+               _favoriteFood = new Dictionary<Player, FoodType>();
+               _preferenceCards = new Dictionary<Player, PreferenceCard>();
+               _loyaltyCards = new Dictionary<Player, LoyaltyCard>();
+
                RevealPlayerWeeklyObjectives(turn_index);
                RevealTeamObjective();
                RevealDailyModifiers();
@@ -179,17 +191,13 @@ namespace ItsLunchTimeCore
 
         private void ChooseRestaurantPreferences()
         {
-            Dictionary<Player, PreferenceCard> responses = new Dictionary<Player, PreferenceCard>();
-            this.Players.ForEach(player => responses[player] = player.AskPreferences());
-
-            Dictionary<Player, LoyaltyCard> responsesLoyalty = new Dictionary<Player, LoyaltyCard>();
-            this.Players.ForEach(player => responsesLoyalty[player] = player.AskLoyalty());
+            this.Players.ForEach(player => _preferenceCards.Add(player, player.AskPreferences()));
+            this.Players.ForEach(player => _loyaltyCards.Add(player, player.AskLoyalty()));
         }
 
         private void ChooseAFavoriteMeal()
         {
-            Dictionary<Player, FoodCard> responses = new Dictionary<Player, FoodCard>();
-            this.Players.ForEach(player => responses[player] = player.AskFavoriteFood());
+            this.Players.ForEach(player => _favoriteFood.Add(player, player.AskFavoriteFood().Type));
         }
 
         private void DealCardsToPlayers()

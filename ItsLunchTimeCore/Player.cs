@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore
 {
@@ -55,14 +52,22 @@ namespace ItsLunchTimeCore
     public class PlayerDescriptor
     {
         public Character Character { get; private set; }
-        public FoodCard FoodCard { get; private set; }        
-        public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }
+        public FoodCard FoodCard { get; private set; }
+
         private Dictionary<DayOfWeek, Place> _internalVisitedPlaces = new Dictionary<DayOfWeek, Place>();
-        internal Restaurant UndesiredRestaurant { get; private set; }
+        public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }
+
+        internal Restaurant UndesiredRestaurant
+        {
+            get;
+        }
         public int CurrentCash { get; internal set; }
 
-        public PlayerDescriptor()
+        private Player player;
+
+        internal PlayerDescriptor(Player player)
         {
+            this.player = player;
             this.VisitedPlaces = new ReadOnlyDictionary<DayOfWeek, Place>(_internalVisitedPlaces);
         }
 

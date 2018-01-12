@@ -7,8 +7,9 @@ namespace BotAgressive
 {
     public class AgressiveBot : Player
     {
+
         public override FoodCard AskFavoriteFood()
-        {
+        {            
             throw new NotImplementedException();
         }
 

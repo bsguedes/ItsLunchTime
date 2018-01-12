@@ -30,6 +30,11 @@ namespace ItsLunchTimeCore
         public Game(List<Player> players, DifficultyLevel difficulty)
         {
             this.Players = players;
+            for (int i = 0; i < players.Count; i++)
+            {
+                this.Players[i].Right = this.Players[(i + 1) % players.Count];
+                this.Players[i].Left = this.Players[(i + players.Count - 1) % players.Count];
+            }
             this._dessertCards = new Dictionary<Player, List<DessertType>>();
             players.ForEach(player => _dessertCards.Add(player, new List<DessertType>()));
 
@@ -85,7 +90,7 @@ namespace ItsLunchTimeCore
                 {
                     if (playerBonus.HasCompletedForPlayer(player.Descriptor, PublicBoard))
                     {
-
+                        this.PublicBoard.AddVictoryPointsToPlayer(playerBonus.Points, player.Descriptor);
                     }
                 }
             }
@@ -93,12 +98,37 @@ namespace ItsLunchTimeCore
 
         private void ScoreTeamBonus()
         {
-            throw new NotImplementedException();
+            PublicBoard.TeamScore += PublicBoard.CurrentTeamBonus.HasCompletedTeamBonus(this.PublicBoard) ? 2 : -2;
         }
 
         private void ScorePreferencesAndLoyalty()
         {
-            throw new NotImplementedException();
+            foreach (Player player in this.Players)
+            {
+                foreach (DayOfWeek day in Extensions.Weekdays)
+                {
+                    if (PublicBoard.RestaurantWithMajority(day) == _preferenceCards[player].FirstPreference && PublicBoard.IsPlayerInMajority(day, player.Descriptor))
+                    {
+                        PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].FirstPreferenceBonus, player.Descriptor);
+                    }
+                    if (PublicBoard.RestaurantWithMajority(day) == _preferenceCards[player].SecondPreference && PublicBoard.IsPlayerInMajority(day, player.Descriptor))
+                    {
+                        PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].SecondPreferenceBonus, player.Descriptor);
+                    }
+                    if (PublicBoard.Restaurants[_preferenceCards[player].Undesired].Visitors[day].Contains(player.Descriptor))
+                    {
+                        switch (_preferenceCards[player].Punishment.Type)
+                        {
+                            case PunishmentType.Cash:
+                                PublicBoard.AddCashToPlayer(_preferenceCards[player].Punishment.Value, player.Descriptor);
+                                break;
+                            case PunishmentType.VictoryPoints:
+                                PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].Punishment.Value, player.Descriptor);
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         private void ReadjustRestaurantPrices()
@@ -180,7 +210,7 @@ namespace ItsLunchTimeCore
                     }
                     cost += restaurant.Cost;
                 }
-                player.AddMoney(-cost);
+                PublicBoard.AddCashToPlayer(-cost, player.Descriptor);
             });
         }
 

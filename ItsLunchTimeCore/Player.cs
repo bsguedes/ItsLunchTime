@@ -21,6 +21,9 @@ namespace ItsLunchTimeCore
 
     public abstract class Player
     {
+        public Player Left { get; internal set; }
+        public Player Right { get; internal set; }
+
         public Character Character { get; private set; }
         public abstract TeamBonusCard ChooseOneTeamBonus(TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2);
         public abstract void GiveFoodCard(FoodCard foodCard);
@@ -42,11 +45,6 @@ namespace ItsLunchTimeCore
                 throw new NotImplementedException();
             }
         }
-
-        internal void AddMoney(int v)
-        {
-            this.Descriptor.CurrentCash += v;
-        }
     }
 
     public class PlayerDescriptor
@@ -61,7 +59,6 @@ namespace ItsLunchTimeCore
         {
             get;
         }
-        public int CurrentCash { get; internal set; }
 
         private Player player;
 

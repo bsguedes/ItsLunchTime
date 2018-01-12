@@ -16,7 +16,7 @@ namespace ItsLunchTime
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             List<Player> players = new List<Player>() { new AgressiveBot(), new AgressiveBot(), new AgressiveBot() };
             Game game = new Game(players, DifficultyLevel.Easy);
         }

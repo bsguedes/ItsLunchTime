@@ -19,6 +19,9 @@ namespace ItsLunchTimeCore
         private Dictionary<PlayerDescriptor, int> _playerScores;
         public ReadOnlyDictionary<PlayerDescriptor, int> PlayerScores { get; }
 
+        private Dictionary<PlayerDescriptor, int> _playerCash;
+        public ReadOnlyDictionary<PlayerDescriptor, int> PlayerCash { get; }
+
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
         public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
         public ReadOnlyDictionary<Character, PlayerDescriptor> PlayerDescriptors { get; private set; }
@@ -55,11 +58,19 @@ namespace ItsLunchTimeCore
             this._playerScores = new Dictionary<PlayerDescriptor, int>();
             players.ForEach(player => this._playerScores.Add(player.Descriptor, 0));
             this.PlayerScores = new ReadOnlyDictionary<PlayerDescriptor, int>(_playerScores);
+
+            this._playerCash = new Dictionary<PlayerDescriptor, int>();
+            players.ForEach(player => this._playerCash.Add(player.Descriptor, 0));
         }
 
         internal void AddVictoryPointsToPlayer(int points, PlayerDescriptor player)
         {
             this._playerScores[player] += points;
+        }
+
+        internal void AddCashToPlayer(int cash, PlayerDescriptor player)
+        {
+            this._playerCash[player] += cash;
         }
 
         internal bool HasMajority(DayOfWeek day)
@@ -119,7 +130,5 @@ namespace ItsLunchTimeCore
         {
             this.CurrentPlayerBonuses = new ReadOnlyCollection<PlayerBonusCard>(bonuses);
         }
-
-
     }
 }

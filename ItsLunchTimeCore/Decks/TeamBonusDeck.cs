@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ItsLunchTimeCore.Decks
 {
@@ -88,7 +88,7 @@ namespace ItsLunchTimeCore.Decks
     }
 
     public class WentOnceToUndesired : TeamBonusCard
-    {        
+    {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
             Dictionary<PlayerDescriptor, bool> status = new Dictionary<PlayerDescriptor, bool>();
@@ -97,7 +97,7 @@ namespace ItsLunchTimeCore.Decks
                 status[player] = false;
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    if (player.VisitedPlaces[day] is RestaurantPlace && player.UndesiredRestaurant == (player.VisitedPlaces[day] as RestaurantPlace).Identifier )
+                    if (player.VisitedPlaces[day] is RestaurantPlace && player.UndesiredRestaurant == (player.VisitedPlaces[day] as RestaurantPlace).Identifier)
                     {
                         status[player] = true;
                     }
@@ -123,7 +123,7 @@ namespace ItsLunchTimeCore.Decks
                     statusPizza[player] += player.VisitedPlaces[day].Menu.Count(x => x == FoodType.Pizza);
                 }
             }
-            return statusBurger.Values.All(x => x >= 3) && statusPizza.Values.All( x => x >= 3);
+            return statusBurger.Values.All(x => x >= 3) && statusPizza.Values.All(x => x >= 3);
         }
     }
 
@@ -151,13 +151,13 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, int> status = new Dictionary<PlayerDescriptor, int>();          
+            Dictionary<PlayerDescriptor, int> status = new Dictionary<PlayerDescriptor, int>();
             foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
-            {                
+            {
                 status.Add(player, 0);
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    status[player] += board.IsPlayerInMajority(day, player) ? 1 : 0;                 
+                    status[player] += board.IsPlayerInMajority(day, player) ? 1 : 0;
                 }
             }
             return status.Values.All(x => x >= 2);
@@ -171,7 +171,7 @@ namespace ItsLunchTimeCore.Decks
             Dictionary<Restaurant, int> majorities = new Dictionary<Restaurant, int>();
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                majorities.Add(restaurant, 0);                
+                majorities.Add(restaurant, 0);
             }
             foreach (DayOfWeek day in Extensions.Weekdays)
             {
@@ -188,7 +188,7 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            IEnumerable<int> cash = board.PlayerDescriptors.Values.Select(x => x.CurrentCash);
+            IEnumerable<int> cash = board.PlayerCash.Values;
             return cash.Max() - cash.Min() <= 15;
         }
     }
@@ -198,14 +198,14 @@ namespace ItsLunchTimeCore.Decks
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
             Dictionary<PlayerDescriptor, Dictionary<FoodType, int>> dictionary = new Dictionary<PlayerDescriptor, Dictionary<FoodType, int>>();
-            foreach(PlayerDescriptor player in board.PlayerDescriptors.Values)
+            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
             {
                 dictionary.Add(player, new Dictionary<FoodType, int>());
-                foreach(FoodType food in Extensions.FoodTypes)
+                foreach (FoodType food in Extensions.FoodTypes)
                 {
                     dictionary[player].Add(food, 0);
                 }
-                foreach(DayOfWeek day in Extensions.Weekdays)
+                foreach (DayOfWeek day in Extensions.Weekdays)
                 {
                     foreach (FoodType food in board.PlayerDescriptors[player.Character].VisitedPlaces[day].Menu)
                     {
@@ -219,7 +219,7 @@ namespace ItsLunchTimeCore.Decks
 
     public class CollectivelyDonate7Cash : TeamBonusCard
     {
-        List<Player> _players;        
+        List<Player> _players;
 
         internal void SetPlayers(List<Player> players)
         {

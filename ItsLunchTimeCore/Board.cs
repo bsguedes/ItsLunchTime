@@ -57,6 +57,11 @@ namespace ItsLunchTimeCore
             this.PlayerScores = new ReadOnlyDictionary<PlayerDescriptor, int>(_playerScores);
         }
 
+        internal void AddVictoryPointsToPlayer(int points, PlayerDescriptor player)
+        {
+            this._playerScores[player] += points;
+        }
+
         internal bool HasMajority(DayOfWeek day)
         {
             return RestaurantWithMajority(day) != null;

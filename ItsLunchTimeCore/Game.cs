@@ -27,7 +27,6 @@ namespace ItsLunchTimeCore
         Dictionary<Player, LoyaltyCard> _loyaltyCards;
         Dictionary<Player, List<DessertType>> _dessertCards;
 
-
         public Game(List<Player> players, DifficultyLevel difficulty)
         {
             this.Players = players;
@@ -61,10 +60,11 @@ namespace ItsLunchTimeCore
 
                DAYS_IN_WEEK.Times(day =>
               {
-                  ChooseRestaurant(day);
-                  AdvanceRestaurantTracks(day);
-                  PayForLunchAndSetMarkers(day);
-                  ScoreTeamPoints(day);
+                  DayOfWeek weekday = Extensions.Weekdays[day];
+                  ChooseRestaurant(weekday);
+                  AdvanceRestaurantTracks(weekday);
+                  PayForLunchAndSetMarkers(weekday);
+                  ScoreTeamPoints(weekday);
                   ScoreDailyModifiers();
                   ScoreVPs();
               });
@@ -113,18 +113,34 @@ namespace ItsLunchTimeCore
 
         private void ScoreDailyModifiers()
         {
-            throw new NotImplementedException();
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                foreach (DayOfWeek day in PublicBoard.Restaurants[restaurant].Modifier.Days)
+                {
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneTeamPointIfMajority>(restaurant, day) && PublicBoard.HasMajority(day))
+                    {
+                        PublicBoard.TeamScore += 1;
+                    }
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneVictoryPointBonus>(restaurant, day))
+                    {
+                        foreach (PlayerDescriptor player in PublicBoard.Restaurants[restaurant].Visitors[day])
+                        {
+                            PublicBoard.AddVictoryPointsToPlayer(1, player);
+                        }
+                    }
+                }
+            }
         }
 
-        private void ScoreTeamPoints(int day)
+        private void ScoreTeamPoints(DayOfWeek day)
         {
             int net_score = 0;
-            net_score += 1 * (PublicBoard.HasMajority(Extensions.Weekdays[day]) ? 1 : -1);
-            if (PublicBoard.HasUnanimity(Extensions.Weekdays[day]))
+            net_score += 1 * (PublicBoard.HasMajority(day) ? 1 : -1);
+            if (PublicBoard.HasUnanimity(day))
             {
                 net_score++;
             }
-            if (PublicBoard.HasSomeoneAlone(Extensions.Weekdays[day]))
+            if (PublicBoard.HasSomeoneAlone(day))
             {
                 net_score--;
             }
@@ -135,20 +151,20 @@ namespace ItsLunchTimeCore
             }
         }
 
-        private void PayForLunchAndSetMarkers(int day)
+        private void PayForLunchAndSetMarkers(DayOfWeek day)
         {
             Players.ForEach(player =>
             {
                 int cost = 0;
-                Place visitedPlace = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
+                Place visitedPlace = player.Descriptor.VisitedPlaces[day];
                 if (visitedPlace is RestaurantPlace)
                 {
                     RestaurantPlace restaurant = visitedPlace as RestaurantPlace;
-                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarIncrease>(restaurant.RestaurantIdentifier, Extensions.Weekdays[day]))
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarIncrease>(restaurant.Identifier, day))
                     {
                         cost++;
                     }
-                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarDiscount>(restaurant.RestaurantIdentifier, Extensions.Weekdays[day]))
+                    if (PublicBoard.RestaurantHasModifierForThisDay<OneDollarDiscount>(restaurant.Identifier, day))
                     {
                         cost--;
                     }
@@ -158,18 +174,18 @@ namespace ItsLunchTimeCore
             });
         }
 
-        private void AdvanceRestaurantTracks(int day)
+        private void AdvanceRestaurantTracks(DayOfWeek day)
         {
             this.Players.ForEach(player =>
             {
-                Place place = player.Descriptor.VisitedPlaces[Extensions.Weekdays[day]];
+                Place place = player.Descriptor.VisitedPlaces[day];
                 if (place is RestaurantPlace &&
-                    !PublicBoard.RestaurantHasModifierForThisDay<DoesNotAdvanceTrackPlus2VictoryPoints>((place as RestaurantPlace).RestaurantIdentifier, Extensions.Weekdays[day]))
+                    !PublicBoard.RestaurantHasModifierForThisDay<DoesNotAdvanceTrackPlus2VictoryPoints>((place as RestaurantPlace).Identifier, day))
                 {
-                    if (this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].AdvancePlayer(player.Descriptor))
+                    if (this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).Identifier].AdvancePlayer(player.Descriptor))
                     {
                         List<DessertCard> cards = new List<DessertCard>();
-                        this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).RestaurantIdentifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
+                        this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).Identifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
                         DessertCard chosenCard = player.ChooseDessert(cards);
                         DessertsPerPlayer[player].Add(chosenCard);
                     }
@@ -177,7 +193,7 @@ namespace ItsLunchTimeCore
             });
         }
 
-        private void ChooseRestaurant(int day)
+        private void ChooseRestaurant(DayOfWeek day)
         {
             List<PreferenceHistogram> last = null;
             for (int i = 0; i < 3; i++)
@@ -196,11 +212,15 @@ namespace ItsLunchTimeCore
                 Place choice = pref.Preferences.FirstOrDefault(x => x.Value == pref.Preferences.Values.Max()).Key;
                 if (choice is Home)
                 {
-                    this.PublicBoard.Home.VisitPlace(pref.Player, Extensions.Weekdays[day]);
+                    this.PublicBoard.Home.VisitPlace(pref.Player, day);
                 }
                 else
                 {
-                    this.PublicBoard.Restaurants[(choice as RestaurantPlace).RestaurantIdentifier].VisitPlace(pref.Player, Extensions.Weekdays[day]);
+                    if (PublicBoard.RestaurantHasModifierForThisDay<Closed>((choice as RestaurantPlace).Identifier, day))
+                    {
+                        throw new InvalidRestaurantException();
+                    }
+                    this.PublicBoard.Restaurants[(choice as RestaurantPlace).Identifier].VisitPlace(pref.Player, day);
                 }
             }
         }

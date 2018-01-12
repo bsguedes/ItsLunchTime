@@ -59,7 +59,7 @@ namespace ItsLunchTimeCore
 
         public string Name { get; }        
         public int Price { get; private set; }
-        public Restaurant RestaurantIdentifier { get; }        
+        public Restaurant Identifier { get; }        
         public RestaurantDailyModifierCard Modifier { get; internal set; }        
     }
 

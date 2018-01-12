@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using ItsLunchTimeCore.Decks;
+﻿using ItsLunchTimeCore.Decks;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace ItsLunchTimeCore
 {
@@ -57,10 +58,18 @@ namespace ItsLunchTimeCore
 
         }
 
-        public string Name { get; }        
+        public string Name { get; }
         public int Price { get; private set; }
-        public Restaurant Identifier { get; }        
-        public RestaurantDailyModifierCard Modifier { get; internal set; }        
+        public Restaurant Identifier { get; }
+        public RestaurantDailyModifierCard Modifier { get; internal set; }
+
+        internal int AdjustPrice(int count)
+        {
+            int visitorCount = this.Visitors.Values.Sum(x => x.Count);
+            if (visitorCount <= count - 1) return -1;
+            if (visitorCount >= count + 2) return 1;
+            return 0;
+        }
     }
 
     public class Home : Place

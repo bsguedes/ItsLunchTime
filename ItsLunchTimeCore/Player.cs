@@ -52,7 +52,7 @@ namespace ItsLunchTimeCore
     public class PlayerDescriptor
     {
         public Character Character { get; private set; }
-        public FoodCard FoodCard { get; private set; }
+        public FoodType FoodCard { get; private set; }
 
         private Dictionary<DayOfWeek, Place> _internalVisitedPlaces = new Dictionary<DayOfWeek, Place>();
         public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }

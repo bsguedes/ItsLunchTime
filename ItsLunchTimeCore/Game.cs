@@ -65,8 +65,8 @@ namespace ItsLunchTimeCore
                   AdvanceRestaurantTracks(weekday);
                   PayForLunchAndSetMarkers(weekday);
                   ScoreTeamPoints(weekday);
-                  ScoreDailyModifiers();
-                  ScoreVPs();
+                  ScoreDailyModifiers(weekday);
+                  ScoreVPs(weekday);
               });
 
                ReadjustRestaurantPrices();
@@ -103,32 +103,42 @@ namespace ItsLunchTimeCore
 
         private void ReadjustRestaurantPrices()
         {
-            throw new NotImplementedException();
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                PublicBoard.Restaurants[restaurant].AdjustPrice(this.Players.Count);
+            }
         }
 
-        private void ScoreVPs()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ScoreDailyModifiers()
+        private void ScoreVPs(DayOfWeek day)
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                foreach (DayOfWeek day in PublicBoard.Restaurants[restaurant].Modifier.Days)
+                foreach (PlayerDescriptor player in PublicBoard.Restaurants[restaurant].Visitors[day])
                 {
-                    if (PublicBoard.RestaurantHasModifierForThisDay<OneTeamPointIfMajority>(restaurant, day) && PublicBoard.HasMajority(day))
+                    if (PublicBoard.Restaurants[restaurant].Menu.Contains(player.FoodCard))
                     {
-                        PublicBoard.TeamScore += 1;
-                    }
-                    if (PublicBoard.RestaurantHasModifierForThisDay<OneVictoryPointBonus>(restaurant, day))
-                    {
-                        foreach (PlayerDescriptor player in PublicBoard.Restaurants[restaurant].Visitors[day])
-                        {
-                            PublicBoard.AddVictoryPointsToPlayer(1, player);
-                        }
+                        PublicBoard.AddVictoryPointsToPlayer(1, player);
                     }
                 }
+            }
+        }
+
+        private void ScoreDailyModifiers(DayOfWeek day)
+        {
+            foreach (Restaurant restaurant in Extensions.Restaurants)
+            {
+                if (PublicBoard.RestaurantHasModifierForThisDay<OneTeamPointIfMajority>(restaurant, day) && PublicBoard.HasMajority(day))
+                {
+                    PublicBoard.TeamScore += 1;
+                }
+                if (PublicBoard.RestaurantHasModifierForThisDay<OneVictoryPointBonus>(restaurant, day))
+                {
+                    foreach (PlayerDescriptor player in PublicBoard.Restaurants[restaurant].Visitors[day])
+                    {
+                        PublicBoard.AddVictoryPointsToPlayer(1, player);
+                    }
+                }
+
             }
         }
 

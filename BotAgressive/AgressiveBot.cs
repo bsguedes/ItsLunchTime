@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace BotAgressive
 {
-    public class AgressiveBot : Player
+    public class AgressiveBot : PlayerBase
     {
 
-        public override FoodCard AskFavoriteFood()
-        {            
-            throw new NotImplementedException();
-        }
-
-        public override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion, Dictionary<PlayerDescriptor, int> intents)
+        public override List<FoodType> AskFavoriteFood()
         {
             throw new NotImplementedException();
         }
 
-        public override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> opinion)
+        public override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion)
         {
             throw new NotImplementedException();
         }
@@ -28,7 +28,7 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
-        public override Dictionary<PlayerDescriptor, int> AskOpinionForDonationTeamObjective(PublicBoard board)
+        public override Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board)
         {
             throw new NotImplementedException();
         }

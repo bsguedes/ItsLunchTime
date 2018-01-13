@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ItsLunchTimeCore.Decks
 {
@@ -29,16 +27,16 @@ namespace ItsLunchTimeCore.Decks
     {
         public abstract int Points { get; }
 
-        internal abstract bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board);
+        internal abstract bool HasCompletedForPlayer(PlayerBase player, PublicBoard board);
     }
 
     public class LastInATrackAlone : PlayerBonusCard
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            foreach(Restaurant restaurant in Extensions.Restaurants)
+            foreach (Restaurant restaurant in Extensions.Restaurants)
             {
                 RestaurantTrack track = board.RestaurantTracks[restaurant];
                 int playerScore = track.PlayerScores[player];
@@ -55,7 +53,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
@@ -74,25 +72,25 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            foreach(Restaurant restaurant in Extensions.Restaurants)
+            foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Monday) && 
-                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Tuesday) && 
+                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Monday) &&
+                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Tuesday) &&
                     board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Wednesday))
                 {
                     return true;
                 }
-                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Tuesday) && 
-                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Wednesday ) && 
+                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Tuesday) &&
+                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Wednesday) &&
                     board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Thursday))
                 {
                     return true;
                 }
-                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Wednesday) && 
-                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Thursday) && 
-                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Friday ))
+                if (board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Wednesday) &&
+                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Thursday) &&
+                    board.Restaurants[restaurant].HasPlayerVisited(player, DayOfWeek.Friday))
                 {
                     return true;
                 }
@@ -105,16 +103,16 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 3;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            foreach(DayOfWeek day in Extensions.Weekdays)
+            foreach (DayOfWeek day in Extensions.Weekdays)
             {
                 if (board.Home.HasPlayerVisited(player, day))
                 {
                     return false;
                 }
             }
-            return true;            
+            return true;
         }
     }
 
@@ -122,7 +120,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
             foreach (DayOfWeek day in Extensions.Weekdays)
             {
@@ -130,7 +128,7 @@ namespace ItsLunchTimeCore.Decks
                 {
                     return false;
                 }
-                foreach(Restaurant restaurant in Extensions.Restaurants)
+                foreach (Restaurant restaurant in Extensions.Restaurants)
                 {
                     if (board.Restaurants[restaurant].Visitors[day].Contains(player) && board.Restaurants[restaurant].Visitors[day].Count == 1)
                     {
@@ -146,9 +144,9 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
+            return board.VisitedPlaces[player].Values
                 .Where(x => x is RestaurantPlace)
                 .Where(y => ((RestaurantPlace)y).Menu.Contains(FoodType.Chinese)).Count() >= 3;
         }
@@ -158,9 +156,9 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 6;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values.Where(x => !(x is Home)).Distinct().Count() >= 4;
+            return board.VisitedPlaces[player].Values.Where(x => !(x is Home)).Distinct().Count() >= 4;
         }
     }
 
@@ -168,7 +166,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
             int majorities = 0;
             foreach (DayOfWeek day in Extensions.Weekdays)
@@ -186,9 +184,9 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 4;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            return board.PlayerDescriptors[player.Character].VisitedPlaces.Values
+            return board.VisitedPlaces[player].Values
                 .Where(x => x is RestaurantPlace)
                 .Where(y => ((RestaurantPlace)y).Menu.Contains(FoodType.Brazilian)).Count() == 0;
         }
@@ -198,7 +196,7 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
             Dictionary<FoodType, int> foodTypes = new Dictionary<FoodType, int>();
             foreach (FoodType type in Extensions.FoodTypes)
@@ -207,10 +205,10 @@ namespace ItsLunchTimeCore.Decks
             }
             foreach (DayOfWeek day in Extensions.Weekdays)
             {
-                Place place = board.PlayerDescriptors[player.Character].VisitedPlaces[day];
+                Place place = board.VisitedPlaces[player][day];
                 if (place is RestaurantPlace)
                 {
-                    foreach(FoodType foodType in (place as RestaurantPlace).Menu)
+                    foreach (FoodType foodType in (place as RestaurantPlace).Menu)
                     {
                         foodTypes[foodType]++;
                     }
@@ -224,15 +222,13 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 6;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
-            PlayerDescriptor descriptor = board.PlayerDescriptors[player.Character];
-
-            Place monday = descriptor.VisitedPlaces[DayOfWeek.Monday];
-            Place tuesday = descriptor.VisitedPlaces[DayOfWeek.Tuesday];
-            Place wednesday = descriptor.VisitedPlaces[DayOfWeek.Wednesday];
-            Place thursday = descriptor.VisitedPlaces[DayOfWeek.Thursday];
-            Place friday = descriptor.VisitedPlaces[DayOfWeek.Friday];
+            Place monday = board.VisitedPlaces[player][DayOfWeek.Monday];
+            Place tuesday = board.VisitedPlaces[player][DayOfWeek.Tuesday];
+            Place wednesday = board.VisitedPlaces[player][DayOfWeek.Wednesday];
+            Place thursday = board.VisitedPlaces[player][DayOfWeek.Thursday];
+            Place friday = board.VisitedPlaces[player][DayOfWeek.Friday];
 
             if (monday is RestaurantPlace && tuesday is RestaurantPlace && monday == tuesday)
             {
@@ -259,11 +255,11 @@ namespace ItsLunchTimeCore.Decks
     {
         public override int Points => 5;
 
-        internal override bool HasCompletedForPlayer(PlayerDescriptor player, PublicBoard board)
+        internal override bool HasCompletedForPlayer(PlayerBase player, PublicBoard board)
         {
             int majorities = 0;
             int playerInMajority = 0;
-            foreach(DayOfWeek day in Extensions.Weekdays)
+            foreach (DayOfWeek day in Extensions.Weekdays)
             {
                 if (board.HasMajority(day))
                 {

@@ -16,24 +16,32 @@ namespace ItsLunchTimeCore
         private Dictionary<Restaurant, RestaurantPlace> _restaurants;
         public ReadOnlyDictionary<Restaurant, RestaurantPlace> Restaurants { get; }
 
-        private Dictionary<PlayerDescriptor, int> _playerScores;
-        public ReadOnlyDictionary<PlayerDescriptor, int> PlayerScores { get; }
+        private Dictionary<PlayerBase, int> _playerScores;
+        public ReadOnlyDictionary<PlayerBase, int> PlayerScores { get; }
 
-        private Dictionary<PlayerDescriptor, int> _playerCash;
-        public ReadOnlyDictionary<PlayerDescriptor, int> PlayerCash { get; }
+        private Dictionary<PlayerBase, int> _playerCash;
+        public ReadOnlyDictionary<PlayerBase, int> PlayerCash { get; }
 
-        private Dictionary<PlayerDescriptor, Restaurant> _undesiredRestaurants;
-        public ReadOnlyDictionary<PlayerDescriptor, Restaurant> UndesiredRestaurants { get; }
+        private Dictionary<PlayerBase, Restaurant> _undesiredRestaurants;
+        public ReadOnlyDictionary<PlayerBase, Restaurant> UndesiredRestaurants { get; }
+
+        private Dictionary<PlayerBase, List<FoodType>> _favoriteFood;
+        public ReadOnlyDictionary<PlayerBase, List<FoodType>> FavoriteFood { get; }
+
+        private Dictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>> _visitedPlaces;
+        private Dictionary<PlayerBase, Dictionary<DayOfWeek, Place>> _internalVisitedPlaces;
+        public ReadOnlyDictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>> VisitedPlaces { get; }
 
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
         public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
-        public ReadOnlyDictionary<Character, PlayerDescriptor> PlayerDescriptors { get; private set; }
+
+        public List<PlayerBase> Players { get; }
 
         public int MinimumMajoritySize
         {
             get
             {
-                switch (PlayerDescriptors.Count)
+                switch (Players.Count)
                 {
                     case 3: return 2;
                     case 4: return 3;
@@ -44,7 +52,7 @@ namespace ItsLunchTimeCore
             }
         }
 
-        public PublicBoard(List<Player> players)
+        public PublicBoard(List<PlayerBase> players)
         {
             this.Home = new Home();
             this._restaurants = new Dictionary<Restaurant, RestaurantPlace>
@@ -58,23 +66,27 @@ namespace ItsLunchTimeCore
             };
             this.Restaurants = new ReadOnlyDictionary<Restaurant, RestaurantPlace>(_restaurants);
 
-            this._playerScores = new Dictionary<PlayerDescriptor, int>();
-            players.ForEach(player => this._playerScores.Add(player.Descriptor, 0));
-            this.PlayerScores = new ReadOnlyDictionary<PlayerDescriptor, int>(_playerScores);
+            this._playerScores = new Dictionary<PlayerBase, int>();
+            players.ForEach(player => this._playerScores.Add(player, 0));
+            this.PlayerScores = new ReadOnlyDictionary<PlayerBase, int>(_playerScores);
 
-            this._playerCash = new Dictionary<PlayerDescriptor, int>();
-            players.ForEach(player => this._playerCash.Add(player.Descriptor, 0));
+            this._playerCash = new Dictionary<PlayerBase, int>();
+            players.ForEach(player => this._playerCash.Add(player, 0));
 
-            this._undesiredRestaurants = new Dictionary<PlayerDescriptor, Restaurant>();
-            this.UndesiredRestaurants = new ReadOnlyDictionary<PlayerDescriptor, Restaurant>(_undesiredRestaurants);
+            this._undesiredRestaurants = new Dictionary<PlayerBase, Restaurant>();
+            this.UndesiredRestaurants = new ReadOnlyDictionary<PlayerBase, Restaurant>(_undesiredRestaurants);
+
+            this._favoriteFood = new Dictionary<PlayerBase, List<FoodType>>();
+            this.FavoriteFood = new ReadOnlyDictionary<PlayerBase, List<FoodType>>(_favoriteFood);
         }
 
-        internal void AddVictoryPointsToPlayer(int points, PlayerDescriptor player)
+
+        internal void AddVictoryPointsToPlayer(int points, PlayerBase player)
         {
             this._playerScores[player] += points;
         }
 
-        internal void AddCashToPlayer(int cash, PlayerDescriptor player)
+        internal void AddCashToPlayer(int cash, PlayerBase player)
         {
             this._playerCash[player] += cash;
         }
@@ -88,7 +100,7 @@ namespace ItsLunchTimeCore
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                if (Restaurants[restaurant].Visitors[day].Count == PlayerDescriptors.Count)
+                if (Restaurants[restaurant].Visitors[day].Count == Players.Count)
                 {
                     return true;
                 }
@@ -114,17 +126,46 @@ namespace ItsLunchTimeCore
             return Restaurants[restaurant].Modifier is T && Restaurants[restaurant].Modifier.Days.Contains(day);
         }
 
+        internal void ClearVisitedPlaces()
+        {
+            this._internalVisitedPlaces = new Dictionary<PlayerBase, Dictionary<DayOfWeek, Place>>();
+            this._visitedPlaces = new Dictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>>();
+            foreach (PlayerBase player in Players)
+            {
+                Dictionary<DayOfWeek, Place> _playerVisitedPlaces = new Dictionary<DayOfWeek, Place>();
+                this._internalVisitedPlaces.Add(player, _playerVisitedPlaces);
+                this._visitedPlaces.Add(player, new ReadOnlyDictionary<DayOfWeek, Place>(_playerVisitedPlaces));
+            }
+        }
+
+        internal void VisitPlace(PlayerBase player, DayOfWeek day, Place place)
+        {
+            this._internalVisitedPlaces[player].Add(day, place);
+            place.VisitPlace(player, day);
+        }
+
+        internal void ClearFavoriteFood()
+        {
+            this._favoriteFood.Clear();
+            Players.ForEach(player => this._favoriteFood.Add(player, new List<FoodType>()));
+        }
+
+        internal void SetFavoriteFoodForPlayer(PlayerBase player, List<FoodType> food)
+        {
+            this._favoriteFood[player].AddRange(food);
+        }
+
         internal void ClearUndesiredRestaurants()
         {
             this._undesiredRestaurants.Clear();
         }
 
-        internal void SetUndesiredRestaurantOfTheWeek(Player player, Restaurant undesired)
+        internal void SetUndesiredRestaurantOfTheWeek(PlayerBase player, Restaurant undesired)
         {
-            this._undesiredRestaurants.Add(player.Descriptor, undesired);
+            this._undesiredRestaurants.Add(player, undesired);
         }
 
-        internal bool IsPlayerInMajority(DayOfWeek day, PlayerDescriptor player)
+        internal bool IsPlayerInMajority(DayOfWeek day, PlayerBase player)
         {
             Restaurant? majorityRestaurant = RestaurantWithMajority(day);
             return majorityRestaurant != null ? Restaurants[majorityRestaurant.Value].Visitors[day].Contains(player) : false;

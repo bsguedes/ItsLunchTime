@@ -18,34 +18,33 @@ namespace ItsLunchTimeCore
 
     public abstract class Place
     {
-        private Dictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> _visitors;
-        private Dictionary<DayOfWeek, List<PlayerDescriptor>> _list_visitors;
+        private Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> _visitors;
+        private Dictionary<DayOfWeek, List<PlayerBase>> _list_visitors;
 
         internal Place(int cost)
         {
             this.Cost = cost;
-            this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>>();
-            this._list_visitors = new Dictionary<DayOfWeek, List<PlayerDescriptor>>();
-            Visitors = new ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>>(_visitors);
+            this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>();
+            this._list_visitors = new Dictionary<DayOfWeek, List<PlayerBase>>();
+            Visitors = new ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>(_visitors);
 
             foreach (DayOfWeek dow in Extensions.Weekdays)
             {
-                _list_visitors[dow] = new List<PlayerDescriptor>();
-                this._visitors.Add(dow, new ReadOnlyCollection<PlayerDescriptor>(_list_visitors[dow]));
+                _list_visitors[dow] = new List<PlayerBase>();
+                this._visitors.Add(dow, new ReadOnlyCollection<PlayerBase>(_list_visitors[dow]));
             }
         }
 
-        internal void VisitPlace(PlayerDescriptor player, DayOfWeek dow)
+        internal void VisitPlace(PlayerBase player, DayOfWeek dow)
         {
             this._list_visitors[dow].Add(player);
-            player.VisitPlace(dow, this);
         }
 
-        public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerDescriptor>> Visitors { get; private set; }
+        public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> Visitors { get; private set; }
         public ReadOnlyCollection<FoodType> Menu { get; private set; }
         public int Cost { get; }
 
-        internal bool HasPlayerVisited(PlayerDescriptor player, DayOfWeek dayOfWeek)
+        internal bool HasPlayerVisited(PlayerBase player, DayOfWeek dayOfWeek)
         {
             return this.Visitors[dayOfWeek].Contains(player);
         }

@@ -62,9 +62,9 @@ namespace ItsLunchTimeCore
             n.Times((i) => action());
         }
 
-        public static bool ActionForCharacter(this IEnumerable<Player> players, Character character, Action<Player> action)
+        public static bool ActionForCharacter(this IEnumerable<PlayerBase> players, Character character, Action<PlayerBase> action)
         {
-            foreach (Player player in players)
+            foreach (PlayerBase player in players)
             {
                 if (player.Character == character)
                 {

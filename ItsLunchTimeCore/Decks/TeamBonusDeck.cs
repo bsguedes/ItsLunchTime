@@ -91,13 +91,13 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, bool> status = new Dictionary<PlayerDescriptor, bool>();
-            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
+            Dictionary<PlayerBase, bool> status = new Dictionary<PlayerBase, bool>();
+            foreach (PlayerBase player in board.Players)
             {
                 status[player] = false;
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    if (player.VisitedPlaces[day] is RestaurantPlace && board.UndesiredRestaurants[player] == (player.VisitedPlaces[day] as RestaurantPlace).Identifier)
+                    if (board.VisitedPlaces[player][day] is RestaurantPlace && board.UndesiredRestaurants[player] == (board.VisitedPlaces[player][day] as RestaurantPlace).Identifier)
                     {
                         status[player] = true;
                     }
@@ -111,16 +111,16 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, int> statusBurger = new Dictionary<PlayerDescriptor, int>();
-            Dictionary<PlayerDescriptor, int> statusPizza = new Dictionary<PlayerDescriptor, int>();
-            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
+            Dictionary<PlayerBase, int> statusBurger = new Dictionary<PlayerBase, int>();
+            Dictionary<PlayerBase, int> statusPizza = new Dictionary<PlayerBase, int>();
+            foreach (PlayerBase player in board.Players)
             {
                 statusBurger.Add(player, 0);
                 statusPizza.Add(player, 0);
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    statusBurger[player] += player.VisitedPlaces[day].Menu.Count(x => x == FoodType.Burger);
-                    statusPizza[player] += player.VisitedPlaces[day].Menu.Count(x => x == FoodType.Pizza);
+                    statusBurger[player] += board.VisitedPlaces[player][day].Menu.Count(x => x == FoodType.Burger);
+                    statusPizza[player] += board.VisitedPlaces[player][day].Menu.Count(x => x == FoodType.Pizza);
                 }
             }
             return statusBurger.Values.All(x => x >= 3) && statusPizza.Values.All(x => x >= 3);
@@ -131,16 +131,16 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, int> statusBrazilian = new Dictionary<PlayerDescriptor, int>();
-            Dictionary<PlayerDescriptor, int> statusChinese = new Dictionary<PlayerDescriptor, int>();
-            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
+            Dictionary<PlayerBase, int> statusBrazilian = new Dictionary<PlayerBase, int>();
+            Dictionary<PlayerBase, int> statusChinese = new Dictionary<PlayerBase, int>();
+            foreach (PlayerBase player in board.Players)
             {
                 statusBrazilian.Add(player, 0);
                 statusChinese.Add(player, 0);
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    statusBrazilian[player] += player.VisitedPlaces[day].Menu.Count(x => x == FoodType.Brazilian);
-                    statusChinese[player] += player.VisitedPlaces[day].Menu.Count(x => x == FoodType.Chinese);
+                    statusBrazilian[player] += board.VisitedPlaces[player][day].Menu.Count(x => x == FoodType.Brazilian);
+                    statusChinese[player] += board.VisitedPlaces[player][day].Menu.Count(x => x == FoodType.Chinese);
                 }
             }
             return statusBrazilian.Values.All(x => x >= 3) && statusChinese.Values.All(x => x >= 3);
@@ -151,8 +151,8 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, int> status = new Dictionary<PlayerDescriptor, int>();
-            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
+            Dictionary<PlayerBase, int> status = new Dictionary<PlayerBase, int>();
+            foreach (PlayerBase player in board.Players)
             {
                 status.Add(player, 0);
                 foreach (DayOfWeek day in Extensions.Weekdays)
@@ -197,8 +197,8 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, Dictionary<FoodType, int>> dictionary = new Dictionary<PlayerDescriptor, Dictionary<FoodType, int>>();
-            foreach (PlayerDescriptor player in board.PlayerDescriptors.Values)
+            Dictionary<PlayerBase, Dictionary<FoodType, int>> dictionary = new Dictionary<PlayerBase, Dictionary<FoodType, int>>();
+            foreach (PlayerBase player in board.Players)
             {
                 dictionary.Add(player, new Dictionary<FoodType, int>());
                 foreach (FoodType food in Extensions.FoodTypes)
@@ -207,7 +207,7 @@ namespace ItsLunchTimeCore.Decks
                 }
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    foreach (FoodType food in board.PlayerDescriptors[player.Character].VisitedPlaces[day].Menu)
+                    foreach (FoodType food in board.VisitedPlaces[player][day].Menu)
                     {
                         dictionary[player][food]++;
                     }
@@ -219,31 +219,31 @@ namespace ItsLunchTimeCore.Decks
 
     public class CollectivelyDonate7Cash : TeamBonusCard
     {
-        List<Player> _players;
+        List<PlayerBase> _players;
 
-        internal void SetPlayers(List<Player> players)
+        internal void SetPlayers(List<PlayerBase> players)
         {
             this._players = players;
         }
 
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>> _opinion = new Dictionary<PlayerDescriptor, Dictionary<PlayerDescriptor, int>>();
+            Dictionary<PlayerBase, Dictionary<PlayerBase, int>> _opinion = new Dictionary<PlayerBase, Dictionary<PlayerBase, int>>();
             _players.ForEach(player =>
            {
-               _opinion.Add(player.Descriptor, player.AskOpinionForDonationTeamObjective(board));
+               _opinion.Add(player, player.AskOpinionForDonationTeamObjective(board));
            });
 
-            Dictionary<PlayerDescriptor, int> _intents = new Dictionary<PlayerDescriptor, int>();
+            Dictionary<PlayerBase, int> _intents = new Dictionary<PlayerBase, int>();
             _players.ForEach(player =>
             {
-                _intents.Add(player.Descriptor, player.AskForDonationTeamObjectiveIntent(board, _opinion));
+                _intents.Add(player, player.AskForDonationTeamObjectiveIntent(board, _opinion));
             });
 
-            Dictionary<PlayerDescriptor, int> _response = new Dictionary<PlayerDescriptor, int>();
+            Dictionary<PlayerBase, int> _response = new Dictionary<PlayerBase, int>();
             _players.ForEach(player =>
             {
-                _response.Add(player.Descriptor, player.AskForDonationTeamObjective(board, _opinion, _intents));
+                _response.Add(player, player.AskForDonationTeamObjective(board, _opinion, _intents));
             });
 
             return _response.Values.Sum() >= 7;

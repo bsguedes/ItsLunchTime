@@ -99,12 +99,14 @@ namespace ItsLunchTimeCore
         private void ScoreTeamBonus()
         {
             PublicBoard.TeamScore += PublicBoard.CurrentTeamBonus.HasCompletedTeamBonus(this.PublicBoard) ? 2 : -2;
+            PublicBoard.ClearUndesiredRestaurants();
         }
 
         private void ScorePreferencesAndLoyalty()
         {
             foreach (Player player in this.Players)
             {
+                PublicBoard.SetUndesiredRestaurantOfTheWeek(player, _preferenceCards[player].Undesired);
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
                     if (PublicBoard.RestaurantWithMajority(day) == _preferenceCards[player].FirstPreference && PublicBoard.IsPlayerInMajority(day, player.Descriptor))

@@ -55,11 +55,6 @@ namespace ItsLunchTimeCore
         private Dictionary<DayOfWeek, Place> _internalVisitedPlaces = new Dictionary<DayOfWeek, Place>();
         public ReadOnlyDictionary<DayOfWeek, Place> VisitedPlaces { get; private set; }
 
-        internal Restaurant UndesiredRestaurant
-        {
-            get;
-        }
-
         private Player player;
 
         internal PlayerDescriptor(Player player)

@@ -97,7 +97,7 @@ namespace ItsLunchTimeCore.Decks
                 status[player] = false;
                 foreach (DayOfWeek day in Extensions.Weekdays)
                 {
-                    if (player.VisitedPlaces[day] is RestaurantPlace && player.UndesiredRestaurant == (player.VisitedPlaces[day] as RestaurantPlace).Identifier)
+                    if (player.VisitedPlaces[day] is RestaurantPlace && board.UndesiredRestaurants[player] == (player.VisitedPlaces[day] as RestaurantPlace).Identifier)
                     {
                         status[player] = true;
                     }

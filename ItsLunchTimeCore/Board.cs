@@ -22,6 +22,9 @@ namespace ItsLunchTimeCore
         private Dictionary<PlayerDescriptor, int> _playerCash;
         public ReadOnlyDictionary<PlayerDescriptor, int> PlayerCash { get; }
 
+        private Dictionary<PlayerDescriptor, Restaurant> _undesiredRestaurants;
+        public ReadOnlyDictionary<PlayerDescriptor, Restaurant> UndesiredRestaurants { get; }
+
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
         public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
         public ReadOnlyDictionary<Character, PlayerDescriptor> PlayerDescriptors { get; private set; }
@@ -61,6 +64,9 @@ namespace ItsLunchTimeCore
 
             this._playerCash = new Dictionary<PlayerDescriptor, int>();
             players.ForEach(player => this._playerCash.Add(player.Descriptor, 0));
+
+            this._undesiredRestaurants = new Dictionary<PlayerDescriptor, Restaurant>();
+            this.UndesiredRestaurants = new ReadOnlyDictionary<PlayerDescriptor, Restaurant>(_undesiredRestaurants);
         }
 
         internal void AddVictoryPointsToPlayer(int points, PlayerDescriptor player)
@@ -106,6 +112,16 @@ namespace ItsLunchTimeCore
             where T : RestaurantDailyModifierCard
         {
             return Restaurants[restaurant].Modifier is T && Restaurants[restaurant].Modifier.Days.Contains(day);
+        }
+
+        internal void ClearUndesiredRestaurants()
+        {
+            this._undesiredRestaurants.Clear();
+        }
+
+        internal void SetUndesiredRestaurantOfTheWeek(Player player, Restaurant undesired)
+        {
+            this._undesiredRestaurants.Add(player.Descriptor, undesired);
         }
 
         internal bool IsPlayerInMajority(DayOfWeek day, PlayerDescriptor player)

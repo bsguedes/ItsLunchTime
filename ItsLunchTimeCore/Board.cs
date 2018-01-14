@@ -100,7 +100,7 @@ namespace ItsLunchTimeCore
 
             this._restaurantTracks = new Dictionary<Restaurant, RestaurantTrack>
             {
-                { Restaurant.Russo, new RestaurantTrack(this.Players, new int[] { }, 0) },
+                { Restaurant.Russo, new RestaurantTrack(this.Players, new int[] { 4 }, 2) },
                 { Restaurant.Palatus, new RestaurantTrack(this.Players, new int[] { 4, 7 }, 2) },
                 { Restaurant.GustoDiBacio, new RestaurantTrack(this.Players, new int[] { 4, 6 }, 2) },
                 { Restaurant.Silva, new RestaurantTrack(this.Players, new int[] { 3, 6 }, 3) },

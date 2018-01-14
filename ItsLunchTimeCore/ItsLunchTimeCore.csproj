@@ -46,6 +46,7 @@
     <Compile Include="Definitions.cs" />
     <Compile Include="Decks\DessertDeck.cs" />
     <Compile Include="Decks\FavoriteFoodDeck.cs" />
+    <Compile Include="DessertBuffet.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Decks\LoyaltyDeck.cs" />

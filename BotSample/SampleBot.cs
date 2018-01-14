@@ -50,9 +50,9 @@ namespace BotSample
             return this._prefCards.First();
         }
 
-        protected override DessertCard ChooseDessert(PublicBoard board, List<DessertCard> cards)
+        protected override int ChooseDessert(PublicBoard board, IEnumerable<DessertCard> cards)
         {
-            return cards.First();
+            return 0;
         }
 
         protected override TeamBonusCard ChooseOneTeamBonus(PublicBoard board, TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2)

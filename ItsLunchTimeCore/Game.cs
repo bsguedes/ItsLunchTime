@@ -18,6 +18,7 @@ namespace ItsLunchTimeCore
         internal PlayerBonusDeck PlayerBonusDeck { get; }
         internal RestaurantDailyModifierDeck RestaurantDailyModifierDeck { get; }
         internal DessertDeck DessertDeck { get; }
+        internal DessertBuffet DessertBuffet { get; }
 
         internal Dictionary<PlayerBase, List<DessertCard>> DessertsPerPlayer { get; set; }
         internal List<PlayerBase> Players { get; }
@@ -46,6 +47,7 @@ namespace ItsLunchTimeCore
             PlayerBonusDeck = new PlayerBonusDeck();
             RestaurantDailyModifierDeck = new RestaurantDailyModifierDeck();
             DessertDeck = new DessertDeck(players.Count);
+            DessertBuffet = new DessertBuffet(5, DessertDeck);
             DessertsPerPlayer = new Dictionary<PlayerBase, List<DessertCard>>();
             Players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
             PublicBoard.CurrentDay = 0;
@@ -91,7 +93,7 @@ namespace ItsLunchTimeCore
 
         private void CalculateFinalScore()
         {
-            throw new NotImplementedException();
+
         }
 
         private void ScorePlayerBonus()
@@ -242,8 +244,8 @@ namespace ItsLunchTimeCore
                     if (this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).Identifier].AdvancePlayer(player))
                     {
                         List<DessertCard> cards = new List<DessertCard>();
-                        this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).Identifier].CardAmount.Times(() => cards.Add(DessertDeck.Draw()));
-                        DessertCard chosenCard = player.ChooseDessert(this.PublicBoard, cards);
+                        int chosenCardIndex = player.ChooseDessert(this.PublicBoard, this.DessertBuffet.TakeChoices(this.PublicBoard.RestaurantTracks[(place as RestaurantPlace).Identifier].CardAmount));
+                        DessertCard chosenCard = this.DessertBuffet.RemoveDessertAtIndex(chosenCardIndex);
                         DessertsPerPlayer[player].Add(chosenCard);
                     }
                 }

@@ -37,7 +37,7 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
-        protected override DessertCard ChooseDessert(PublicBoard board, List<DessertCard> cards)
+        protected override int ChooseDessert(PublicBoard board, IEnumerable<DessertCard> cards)
         {
             throw new NotImplementedException();
         }

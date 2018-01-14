@@ -32,7 +32,7 @@ namespace ItsLunchTimeCore
         protected internal abstract LoyaltyCard AskLoyalty(PublicBoard board);
         protected internal abstract PreferenceCard AskPreferences(PublicBoard board);
         protected internal abstract PreferenceHistogram GetPreferenceHistogram(PublicBoard board, int iteration, IEnumerable<PreferenceHistogram> last);
-        protected internal abstract DessertCard ChooseDessert(PublicBoard board, List<DessertCard> cards);
+        protected internal abstract int ChooseDessert(PublicBoard board, IEnumerable<DessertCard> cards);
         protected internal abstract Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board);
         protected internal abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion);
         protected internal abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents);

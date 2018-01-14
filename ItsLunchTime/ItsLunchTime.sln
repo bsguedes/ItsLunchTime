@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItsLunchTimeCore", "..\ItsL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotAgressive", "..\BotAgressive\BotAgressive.csproj", "{713A7632-A899-4CAE-AF92-B6CEFD02A15C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotSample", "..\BotSample\BotSample.csproj", "{388DD8C3-7C42-4512-AC78-1C0D7CE18749}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{713A7632-A899-4CAE-AF92-B6CEFD02A15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{713A7632-A899-4CAE-AF92-B6CEFD02A15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{713A7632-A899-4CAE-AF92-B6CEFD02A15C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

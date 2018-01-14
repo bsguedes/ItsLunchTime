@@ -8,7 +8,8 @@ namespace ItsLunchTimeCore
 {
     public class PublicBoard
     {
-        public int CurrentDay { get; private set; }
+        public int CurrentDay { get; internal set; }
+        public DayOfWeek CurrentWeekDay { get { return Extensions.DaysOfWeek[(CurrentDay - 1) % 7]; } }
         public int TeamScore { get; internal set; }
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
         public Home Home { get; }
@@ -54,15 +55,16 @@ namespace ItsLunchTimeCore
 
         public PublicBoard(List<PlayerBase> players)
         {
+            this.Players = players;
             this.Home = new Home();
             this._restaurants = new Dictionary<Restaurant, RestaurantPlace>
             {
-                { Restaurant.Russo, new RestaurantPlace(2) },
-                { Restaurant.Palatus, new RestaurantPlace(3) },
-                { Restaurant.GustoDiBacio, new RestaurantPlace(4) },
-                { Restaurant.Silva, new RestaurantPlace(4) },
-                { Restaurant.Panorama, new RestaurantPlace(5) },
-                { Restaurant.JoeAndLeos, new RestaurantPlace(6) }
+                { Restaurant.Russo, new RestaurantPlace(2, FoodType.Brazilian) },
+                { Restaurant.Palatus, new RestaurantPlace(3, FoodType.Pasta) },
+                { Restaurant.GustoDiBacio, new RestaurantPlace(4, FoodType.Pizza) },
+                { Restaurant.Silva, new RestaurantPlace(4, FoodType.Burger) },
+                { Restaurant.Panorama, new RestaurantPlace(5, FoodType.Chinese) },
+                { Restaurant.JoeAndLeos, new RestaurantPlace(6, FoodType.Vegetarian) }
             };
             this.Restaurants = new ReadOnlyDictionary<Restaurant, RestaurantPlace>(_restaurants);
 

@@ -246,6 +246,11 @@ namespace ItsLunchTimeCore.Decks
                 _response.Add(player, player.AskForDonationTeamObjective(board, _opinion, _intents));
             });
 
+            while (_response.Values.Sum() > 7)
+            {
+                _response[_response.Where(x => x.Value == _response.Values.Max()).Scramble().First().Key]--;
+            }
+
             return _response.Values.Sum() >= 7;
         }
     }

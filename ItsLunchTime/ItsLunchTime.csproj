@@ -99,6 +99,10 @@
       <Project>{713a7632-a899-4cae-af92-b6cefd02a15c}</Project>
       <Name>BotAgressive</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BotSample\BotSample.csproj">
+      <Project>{388dd8c3-7c42-4512-ac78-1c0d7ce18749}</Project>
+      <Name>BotSample</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ItsLunchTimeCore\ItsLunchTimeCore.csproj">
       <Project>{64a64013-7aa5-4967-bdf8-4f9ecf5c95f6}</Project>
       <Name>ItsLunchTimeCore</Name>

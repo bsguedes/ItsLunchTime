@@ -24,19 +24,19 @@ namespace ItsLunchTimeCore
 
         public Character Character { get; private set; }
 
-        public abstract TeamBonusCard ChooseOneTeamBonus(TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2);
-        public abstract void GiveFoodCard(FoodCard foodCard);
-        public abstract void GiveLoyaltyCard(LoyaltyCard loyaltyCard);
-        public abstract void GivePreferenceCard(PreferenceCard preferenceCard);
-        public abstract List<FoodType> AskFavoriteFood();
-        public abstract PreferenceCard AskPreferences();
-        public abstract LoyaltyCard AskLoyalty();
-        public abstract Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board);
-        public abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion);
-        public abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents);
-        public abstract PreferenceHistogram GetPreferenceHistogram(int i, List<PreferenceHistogram> last);
-        public abstract DessertCard ChooseDessert(List<DessertCard> cards);
-
+        protected internal abstract void SignalNewWeek(PublicBoard board);
+        protected internal abstract void GiveFoodCard(FoodCard foodCard);
+        protected internal abstract void GiveLoyaltyCard(LoyaltyCard loyaltyCard);
+        protected internal abstract void GivePreferenceCard(PreferenceCard preferenceCard);
+        protected internal abstract List<FoodType> AskFavoriteFood(PublicBoard board);
+        protected internal abstract LoyaltyCard AskLoyalty(PublicBoard board);
+        protected internal abstract PreferenceCard AskPreferences(PublicBoard board);
+        protected internal abstract PreferenceHistogram GetPreferenceHistogram(PublicBoard board, int iteration, IEnumerable<PreferenceHistogram> last);
+        protected internal abstract DessertCard ChooseDessert(PublicBoard board, List<DessertCard> cards);
+        protected internal abstract Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board);
+        protected internal abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion);
+        protected internal abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents);
+        protected internal abstract TeamBonusCard ChooseOneTeamBonus(PublicBoard board, TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2);
     }
 
 }

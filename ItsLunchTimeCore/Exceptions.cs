@@ -6,4 +6,14 @@ namespace ItsLunchTimeCore
     {
 
     }
+
+    public class ZeroSumException : Exception
+    {
+
+    }
+
+    public class NegativePreferenceValueException : Exception
+    {
+
+    }
 }

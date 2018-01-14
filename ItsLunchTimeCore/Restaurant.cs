@@ -20,6 +20,7 @@ namespace ItsLunchTimeCore
     {
         private Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> _visitors;
         private Dictionary<DayOfWeek, List<PlayerBase>> _list_visitors;
+        private List<FoodType> _menu;
 
         internal Place(int cost)
         {
@@ -27,6 +28,7 @@ namespace ItsLunchTimeCore
             this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>();
             this._list_visitors = new Dictionary<DayOfWeek, List<PlayerBase>>();
             Visitors = new ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>(_visitors);
+            Menu = new ReadOnlyCollection<FoodType>(_menu);
 
             foreach (DayOfWeek dow in Extensions.Weekdays)
             {
@@ -35,13 +37,23 @@ namespace ItsLunchTimeCore
             }
         }
 
+        internal void ClearFood()
+        {
+            this._menu = new List<FoodType>();
+        }
+
+        internal void AddFoodToMenu(FoodType food)
+        {
+            this._menu.Add(food);
+        }
+
         internal void VisitPlace(PlayerBase player, DayOfWeek dow)
         {
             this._list_visitors[dow].Add(player);
         }
 
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> Visitors { get; private set; }
-        public ReadOnlyCollection<FoodType> Menu { get; private set; }
+        public ReadOnlyCollection<FoodType> Menu { get; }
         public int Cost { get; }
 
         internal bool HasPlayerVisited(PlayerBase player, DayOfWeek dayOfWeek)
@@ -52,11 +64,13 @@ namespace ItsLunchTimeCore
 
     public class RestaurantPlace : Place
     {
-        internal RestaurantPlace(int cost) : base(cost)
+        internal RestaurantPlace(int cost, FoodType baseFood) : base(cost)
         {
-
+            this.BaseFood = baseFood;
+            this.AddFoodToMenu(baseFood);
         }
 
+        public FoodType BaseFood { get; }
         public string Name { get; }
         public int Price { get; private set; }
         public Restaurant Identifier { get; }

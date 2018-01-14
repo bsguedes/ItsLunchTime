@@ -7,63 +7,67 @@ namespace BotAgressive
 {
     public class AgressiveBot : PlayerBase
     {
-
-        public override List<FoodType> AskFavoriteFood()
+        protected override List<FoodType> AskFavoriteFood(PublicBoard board)
         {
             throw new NotImplementedException();
         }
 
-        public override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents)
+        protected override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents)
         {
             throw new NotImplementedException();
         }
 
-        public override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion)
+        protected override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion)
         {
             throw new NotImplementedException();
         }
 
-        public override LoyaltyCard AskLoyalty()
+        protected override LoyaltyCard AskLoyalty(PublicBoard board)
         {
             throw new NotImplementedException();
         }
 
-        public override Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board)
+        protected override Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board)
         {
             throw new NotImplementedException();
         }
 
-        public override PreferenceCard AskPreferences()
+        protected override PreferenceCard AskPreferences(PublicBoard board)
         {
             throw new NotImplementedException();
         }
 
-        public override DessertCard ChooseDessert(List<DessertCard> cards)
+        protected override DessertCard ChooseDessert(PublicBoard board, List<DessertCard> cards)
         {
             throw new NotImplementedException();
         }
 
-        public override TeamBonusCard ChooseOneTeamBonus(TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2)
+        protected override TeamBonusCard ChooseOneTeamBonus(PublicBoard board, TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2)
         {
             throw new NotImplementedException();
         }
 
-        public override PreferenceHistogram GetPreferenceHistogram(int i, List<PreferenceHistogram> last)
+        protected override PreferenceHistogram GetPreferenceHistogram(PublicBoard board, int iteration, IEnumerable<PreferenceHistogram> last)
         {
             throw new NotImplementedException();
         }
 
-        public override void GiveFoodCard(FoodCard foodCard)
+        protected override void GiveFoodCard(FoodCard foodCard)
         {
             throw new NotImplementedException();
         }
 
-        public override void GiveLoyaltyCard(LoyaltyCard loyaltyCard)
+        protected override void GiveLoyaltyCard(LoyaltyCard loyaltyCard)
         {
             throw new NotImplementedException();
         }
 
-        public override void GivePreferenceCard(PreferenceCard preferenceCard)
+        protected override void GivePreferenceCard(PreferenceCard preferenceCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SignalNewWeek(PublicBoard board)
         {
             throw new NotImplementedException();
         }

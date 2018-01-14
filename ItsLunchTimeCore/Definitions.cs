@@ -14,7 +14,8 @@ namespace ItsLunchTimeCore
         PreferenceCard,
         Punishment,
         Food,
-        Character
+        Character,
+        Tracks
     }
 
     public enum DifficultyLevel

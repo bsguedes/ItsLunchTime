@@ -55,8 +55,7 @@ namespace ItsLunchTimeCore
             this._dessertCards = new Dictionary<PlayerBase, List<DessertCard>>();
             players.ForEach(player => _dessertCards.Add(player, new List<DessertCard>()));
 
-            PublicBoard = new PublicBoard(players, difficulty);
-            PublicBoard.DessertsHandler = (player) => _dessertCards[player];
+            PublicBoard = new PublicBoard(players, difficulty) { DessertsHandler = (player) => _dessertCards[player] };
             FoodDeck = new FavoriteFoodDeck();
             LoyaltyDeck = new LoyaltyDeck();
             PreferencesDeck = new PreferencesDeck();
@@ -112,13 +111,51 @@ namespace ItsLunchTimeCore
         private void CalculateFinalScore()
         {
             EvaluateDesserts();
+            EvaluateRestaurantTracks();
             ConvertCashToVP();
+
 
             //Console.WriteLine("Scores:");
             //Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerScores.Select(x => x.Value)));
             //Console.WriteLine("Cash:");
             //Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerCash.Select(x => x.Value)));
             //Console.WriteLine("Team score: {0}", this.PublicBoard.TeamScore);
+        }
+
+        private void EvaluateRestaurantTracks()
+        {
+            foreach (Restaurant r in Extensions.Restaurants)
+            {
+                RestaurantTrack track = PublicBoard.RestaurantTracks[r];
+                Dictionary<PlayerBase, int> ordered = track.PlayerScores.OrderByDescending(x => x.Value).ToDictionary(a => a.Key, b => b.Value);
+
+                int rewardedPlayers = 0;
+                var tiedAtFirst = ordered.Where(x => x.Value == ordered.First().Value);
+                rewardedPlayers += tiedAtFirst.Count();
+                int points = 6 + rewardedPlayers > 1 ? 4 : 0 + rewardedPlayers > 2 ? 2 : 0;
+                foreach (var a in tiedAtFirst)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(points / rewardedPlayers, a.Key, VictoryPointsSource.Tracks);
+                }
+                if (rewardedPlayers < PublicBoard.Players.Count)
+                {
+                    var tiedAtSecond = ordered.Where(x => x.Value == ordered.ElementAt(rewardedPlayers).Value);
+                    points = rewardedPlayers == 1 ? (4 + tiedAtSecond.Count() > 1 ? 2 : 0) : rewardedPlayers == 2 ? 2 : 0;
+                    foreach (var b in tiedAtSecond)
+                    {
+                        PublicBoard.AddVictoryPointsToPlayer(points / tiedAtSecond.Count(), b.Key, VictoryPointsSource.Tracks);
+                    }
+                    rewardedPlayers += tiedAtSecond.Count();
+                    if (rewardedPlayers == 2)
+                    {
+                        var tiedAtThird = ordered.Where(x => x.Value == ordered.ElementAt(2).Value);
+                        foreach (var c in tiedAtThird)
+                        {
+                            PublicBoard.AddVictoryPointsToPlayer(points / tiedAtThird.Count(), c.Key, VictoryPointsSource.Tracks);
+                        }
+                    }
+                }
+            }
         }
 
         private void ConvertCashToVP()

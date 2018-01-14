@@ -39,7 +39,7 @@ namespace ItsLunchTimeCore
 
         public int Cash => Board == null ? 0 : Board.PlayerCash[this];
         public int VictoryPoints => Board == null ? 0 : Board.PlayerScores[this];
-        public IEnumerable<FoodType> FavoriteFood => Board == null ? null : Board.FavoriteFood[this];
+        public IEnumerable<FoodType> FavoriteFood => Board?.FavoriteFood[this];
         protected IEnumerable<DessertCard> Desserts => Board.GetDessertsFromPlayer(this);
         public Dictionary<PlayerBase, int> DessertCount => Board.Players.Select(x => new { P = x, C = Board.GetDessertsFromPlayer(x).Count() }).ToDictionary(a => a.P, b => b.C);
 

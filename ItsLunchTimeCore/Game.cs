@@ -421,7 +421,7 @@ namespace ItsLunchTimeCore
             {
                 if (PublicBoard.VisitedPlaces[player][day].Menu.Contains(FoodType.Vegetarian))
                 {
-                    PublicBoard.AddVictoryPointsToPlayer(3, player, VictoryPointsSource.Character);
+                    PublicBoard.AddVictoryPointsToPlayer(2, player, VictoryPointsSource.Character);
                 }
             });
         }

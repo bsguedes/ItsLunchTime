@@ -25,6 +25,7 @@ namespace ItsLunchTimeCore
         public ReadOnlyDictionary<PlayerBase, int> PlayerScores { get; }
 
         private Dictionary<PlayerBase, int> _playerCash;
+
         public ReadOnlyDictionary<PlayerBase, int> PlayerCash { get; }
 
         private Dictionary<PlayerBase, Restaurant> _undesiredRestaurants;
@@ -135,6 +136,13 @@ namespace ItsLunchTimeCore
                     _separatedScores[player].Add(v, 0);
                 }
             });
+        }
+
+        internal Func<PlayerBase, List<DessertCard>> DessertsHandler { get; set; }
+
+        internal IEnumerable<DessertCard> GetDessertsFromPlayer(PlayerBase player)
+        {
+            return this.DessertsHandler(player);
         }
 
         internal void AddTeamScore(int v)

@@ -42,27 +42,31 @@ namespace ItsLunchTime
                 {
                     players.Add(new SampleBot(characters.ElementAt(j)));
                 }
-                Game game = new Game(players, DifficultyLevel.Medium);
+                Game game = new Game(players, DifficultyLevel.Easy);
 
-                foreach (PlayerBase player in players)
+                if (game.Win)
                 {
-                    points[player.Character] += game.PublicBoard.PlayerScores[player];
-                    matches[player.Character]++;
-                    foreach (VictoryPointsSource v in Enum.GetValues(typeof(VictoryPointsSource)))
+                    foreach (PlayerBase player in players)
                     {
-                        split[player.Character][v] += game.PublicBoard.SeparatedScores[player][v];
+                        points[player.Character] += game.PublicBoard.PlayerScores[player];
+                        matches[player.Character]++;
+                        foreach (VictoryPointsSource v in Enum.GetValues(typeof(VictoryPointsSource)))
+                        {
+                            split[player.Character][v] += game.PublicBoard.SeparatedScores[player][v];
+                        }
                     }
                 }
             }
 
-            foreach (Character c in Extensions.CharacterTypes)
+            Console.WriteLine("Won games: {0}", matches.Sum(x => x.Value));
+            foreach (Character c in points.OrderByDescending(x => x.Value / matches[x.Key]).Select(x => x.Key))
             {
                 Dictionary<VictoryPointsSource, int> dict = new Dictionary<VictoryPointsSource, int>();
                 foreach (VictoryPointsSource v in Enum.GetValues(typeof(VictoryPointsSource)))
                 {
                     dict.Add(v, split[c][v] / matches[c]);
                 }
-                Console.WriteLine("{0,-15}: {1,-3} ({2})", c, points[c] / matches[c], string.Join(" ", dict.Select(x => string.Format("{0}={1,-3}", x.Key, x.Value))));
+                Console.WriteLine("{0,-18}: {1,-3} ({2})", c, points[c] / matches[c], string.Join(" ", dict.Select(x => string.Format("{0}={1,-3}", x.Key, x.Value))));
             }
 
         }

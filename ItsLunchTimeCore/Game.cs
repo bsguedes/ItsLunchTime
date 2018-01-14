@@ -37,6 +37,8 @@ namespace ItsLunchTimeCore
             }
         }
 
+        public bool Win => this.PublicBoard.CurrentDay == 28 && this.PublicBoard.TeamScore >= 15;
+
         Dictionary<PlayerBase, PreferenceCard> _preferenceCards;
         Dictionary<PlayerBase, LoyaltyCard> _loyaltyCards;
         Dictionary<PlayerBase, List<DessertCard>> _dessertCards;
@@ -46,6 +48,7 @@ namespace ItsLunchTimeCore
             this._players = players;
             for (int i = 0; i < players.Count; i++)
             {
+                this._players[i].SetBoard(PublicBoard);
                 this._players[i].Right = this._players[(i + 1) % players.Count];
                 this._players[i].Left = this._players[(i + players.Count - 1) % players.Count];
             }
@@ -53,7 +56,7 @@ namespace ItsLunchTimeCore
             players.ForEach(player => _dessertCards.Add(player, new List<DessertCard>()));
 
             PublicBoard = new PublicBoard(players, difficulty);
-
+            PublicBoard.DessertsHandler = (player) => _dessertCards[player];
             FoodDeck = new FavoriteFoodDeck();
             LoyaltyDeck = new LoyaltyDeck();
             PreferencesDeck = new PreferencesDeck();

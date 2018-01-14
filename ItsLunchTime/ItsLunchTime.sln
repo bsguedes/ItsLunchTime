@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotAgressive", "..\BotAgres
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotSample", "..\BotSample\BotSample.csproj", "{388DD8C3-7C42-4512-AC78-1C0D7CE18749}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotStrategist", "..\BotStrategist\BotStrategist.csproj", "{BF556D74-8F2F-4FE6-A898-3B550BC6BA14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{388DD8C3-7C42-4512-AC78-1C0D7CE18749}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF556D74-8F2F-4FE6-A898-3B550BC6BA14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF556D74-8F2F-4FE6-A898-3B550BC6BA14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF556D74-8F2F-4FE6-A898-3B550BC6BA14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF556D74-8F2F-4FE6-A898-3B550BC6BA14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

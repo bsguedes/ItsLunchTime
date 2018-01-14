@@ -1,5 +1,6 @@
 ﻿using ItsLunchTimeCore.Decks;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ItsLunchTimeCore
 {
@@ -28,6 +29,19 @@ namespace ItsLunchTimeCore
         public PlayerBase Right { get; internal set; }
 
         public Character Character { get; private set; }
+
+        internal void SetBoard(PublicBoard board)
+        {
+            this.Board = board;
+        }
+
+        PublicBoard Board { get; set; }
+
+        public int Cash => Board == null ? 0 : Board.PlayerCash[this];
+        public int VictoryPoints => Board == null ? 0 : Board.PlayerScores[this];
+        public IEnumerable<FoodType> FavoriteFood => Board == null ? null : Board.FavoriteFood[this];
+        protected IEnumerable<DessertCard> Desserts => Board.GetDessertsFromPlayer(this);
+        public Dictionary<PlayerBase, int> DessertCount => Board.Players.Select(x => new { P = x, C = Board.GetDessertsFromPlayer(x).Count() }).ToDictionary(a => a.P, b => b.C);
 
         protected internal abstract void SignalNewWeek(PublicBoard board);
         protected internal abstract void GiveFoodCard(FoodCard foodCard);

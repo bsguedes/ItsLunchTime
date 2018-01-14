@@ -25,7 +25,18 @@ namespace ItsLunchTimeCore
         internal DessertBuffet DessertBuffet { get; }
 
         internal Dictionary<PlayerBase, List<DessertCard>> DessertsPerPlayer { get; set; }
-        internal List<PlayerBase> Players { get; }
+        private int FirstPlayerIndex = 0;
+        private List<PlayerBase> _players;
+        internal IEnumerable<PlayerBase> Players
+        {
+            get
+            {
+                foreach (PlayerBase player in _players.Skip(FirstPlayerIndex).Concat(_players.Take(FirstPlayerIndex)))
+                {
+                    yield return player;
+                }
+            }
+        }
 
         Dictionary<PlayerBase, PreferenceCard> _preferenceCards;
         Dictionary<PlayerBase, LoyaltyCard> _loyaltyCards;
@@ -33,11 +44,11 @@ namespace ItsLunchTimeCore
 
         public Game(List<PlayerBase> players, DifficultyLevel difficulty)
         {
-            this.Players = players;
+            this._players = players;
             for (int i = 0; i < players.Count; i++)
             {
-                this.Players[i].Right = this.Players[(i + 1) % players.Count];
-                this.Players[i].Left = this.Players[(i + players.Count - 1) % players.Count];
+                this._players[i].Right = this._players[(i + 1) % players.Count];
+                this._players[i].Left = this._players[(i + players.Count - 1) % players.Count];
             }
             this._dessertCards = new Dictionary<PlayerBase, List<DessertType>>();
             players.ForEach(player => _dessertCards.Add(player, new List<DessertType>()));
@@ -53,7 +64,7 @@ namespace ItsLunchTimeCore
             DessertDeck = new DessertDeck(players.Count);
             DessertBuffet = new DessertBuffet(DESSERT_BUFFET_SIZE, DessertDeck);
             DessertsPerPlayer = new Dictionary<PlayerBase, List<DessertCard>>();
-            Players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
+            _players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
             PublicBoard.CurrentDay = 0;
 
             for (int i = 0; i < MAX_WEEKS; i++)
@@ -75,7 +86,6 @@ namespace ItsLunchTimeCore
 
                 for (int day = 0; day < DAYS_IN_WEEK; day++)
                 {
-
                     PublicBoard.CurrentDay++;
                     DayOfWeek weekday = Extensions.Weekdays[day];
                     ChooseRestaurant(weekday);
@@ -84,6 +94,7 @@ namespace ItsLunchTimeCore
                     ScoreTeamPoints(weekday);
                     ScoreDailyModifiers(weekday);
                     ScoreVPs(weekday);
+                    FirstPlayerIndex = (FirstPlayerIndex + 1) % this.Players.Count();
                 }
 
                 PublicBoard.CurrentDay++;
@@ -91,7 +102,6 @@ namespace ItsLunchTimeCore
                 ScorePreferencesAndLoyalty();
                 ScoreTeamBonus();
                 ScorePlayerBonus();
-
             }
 
             CalculateFinalScore();
@@ -149,60 +159,15 @@ namespace ItsLunchTimeCore
                     }
                     if (PublicBoard.Restaurants[_preferenceCards[player].Undesired].Visitors[day].Contains(player))
                     {
-                        switch (_preferenceCards[player].Punishment.Type)
-                        {
-                            case PunishmentType.Cash:
-                                if (PublicBoard.PlayerCash[player] < Math.Abs(_preferenceCards[player].Punishment.Value))
-                                {
-                                    PublicBoard.AddCashToPlayer(-PublicBoard.PlayerCash[player], player);
-                                }
-                                else
-                                {
-                                    PublicBoard.AddCashToPlayer(_preferenceCards[player].Punishment.Value, player);
-                                }
-                                break;
-                            case PunishmentType.VictoryPoints:
-                                PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].Punishment.Value, player);
-                                break;
-                        }
+                        ApplyPunishment(_preferenceCards[player].Punishment, player);
                     }
                     if (PublicBoard.IsPlayerAlone(day, player.Left))
                     {
-                        switch (_preferenceCards[player].SideBan.Type)
-                        {
-                            case PunishmentType.Cash:
-                                if (PublicBoard.PlayerCash[player.Left] < Math.Abs(_preferenceCards[player].SideBan.Value))
-                                {
-                                    PublicBoard.AddCashToPlayer(-PublicBoard.PlayerCash[player.Left], player.Left);
-                                }
-                                else
-                                {
-                                    PublicBoard.AddCashToPlayer(_preferenceCards[player].SideBan.Value, player.Left);
-                                }
-                                break;
-                            case PunishmentType.VictoryPoints:
-                                PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].SideBan.Value, player.Left);
-                                break;
-                        }
+                        ApplyPunishment(_preferenceCards[player].SideBan, player.Left);
                     }
                     if (PublicBoard.IsPlayerAlone(day, player.Right))
                     {
-                        switch (_preferenceCards[player].SideBan.Type)
-                        {
-                            case PunishmentType.Cash:
-                                if (PublicBoard.PlayerCash[player.Right] < Math.Abs(_preferenceCards[player].SideBan.Value))
-                                {
-                                    PublicBoard.AddCashToPlayer(-PublicBoard.PlayerCash[player.Right], player.Right);
-                                }
-                                else
-                                {
-                                    PublicBoard.AddCashToPlayer(_preferenceCards[player].SideBan.Value, player.Right);
-                                }
-                                break;
-                            case PunishmentType.VictoryPoints:
-                                PublicBoard.AddVictoryPointsToPlayer(_preferenceCards[player].SideBan.Value, player.Right);
-                                break;
-                        }
+                        ApplyPunishment(_preferenceCards[player].SideBan, player.Right);
                     }
                 }
 
@@ -230,11 +195,32 @@ namespace ItsLunchTimeCore
             }
         }
 
+        private void ApplyPunishment(Punishment punishment, PlayerBase target)
+        {
+            switch (punishment.Type)
+            {
+                case PunishmentType.Cash:
+                    if (PublicBoard.PlayerCash[target] < Math.Abs(punishment.Value))
+                    {
+                        PublicBoard.AddCashToPlayer(-PublicBoard.PlayerCash[target], target);
+                    }
+                    else
+                    {
+                        PublicBoard.AddCashToPlayer(punishment.Value, target);
+                    }
+                    break;
+                case PunishmentType.VictoryPoints:
+                    PublicBoard.AddVictoryPointsToPlayer(punishment.Value, target);
+                    break;
+            }
+
+        }
+
         private void ReadjustRestaurantPrices()
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                PublicBoard.Restaurants[restaurant].AdjustPrice(this.Players.Count);
+                PublicBoard.Restaurants[restaurant].AdjustPrice(this.Players.Count());
             }
         }
 
@@ -314,7 +300,7 @@ namespace ItsLunchTimeCore
 
         private void AdvanceRestaurantTracks(DayOfWeek day)
         {
-            this.Players.ForEach(player =>
+            foreach (PlayerBase player in this.Players)
             {
                 Place place = PublicBoard.VisitedPlaces[player][day];
                 if (place is RestaurantPlace &&
@@ -332,7 +318,7 @@ namespace ItsLunchTimeCore
                 {
                     PublicBoard.AddVictoryPointsToPlayer(2, player);
                 }
-            });
+            }
         }
 
         private void ChooseRestaurant(DayOfWeek day)
@@ -372,13 +358,22 @@ namespace ItsLunchTimeCore
 
         private void ChooseRestaurantPreferences()
         {
-            this.Players.ForEach(player => _preferenceCards.Add(player, player.AskPreferences(this.PublicBoard)));
-            this.Players.ForEach(player => _loyaltyCards.Add(player, player.AskLoyalty(this.PublicBoard)));
+            foreach (PlayerBase player in this.Players)
+            {
+                _preferenceCards.Add(player, player.AskPreferences(this.PublicBoard));
+            }
+            foreach (PlayerBase player in this.Players)
+            {
+                _loyaltyCards.Add(player, player.AskLoyalty(this.PublicBoard));
+            }
         }
 
         private void ChooseAFavoriteMeal()
         {
-            this.Players.ForEach(player => PublicBoard.SetFavoriteFoodForPlayer(player, player.AskFavoriteFood(this.PublicBoard)));
+            foreach (PlayerBase player in this.Players)
+            {
+                PublicBoard.SetFavoriteFoodForPlayer(player, player.AskFavoriteFood(this.PublicBoard));
+            }
         }
 
         private void DealCardsToPlayers()
@@ -394,15 +389,24 @@ namespace ItsLunchTimeCore
 
             for (int i = 0; i < 3; i++)
             {
-                this.Players.ForEach(player => player.GiveFoodCard(this.FoodDeck.Draw()));
+                foreach (PlayerBase player in this.Players)
+                {
+                    player.GiveFoodCard(this.FoodDeck.Draw());
+                }
             }
             for (int i = 0; i < 3; i++)
             {
-                this.Players.ForEach(player => player.GiveLoyaltyCard(this.LoyaltyDeck.Draw()));
+                foreach (PlayerBase player in this.Players)
+                {
+                    player.GiveLoyaltyCard(this.LoyaltyDeck.Draw());
+                }
             }
             for (int i = 0; i < 4; i++)
             {
-                this.Players.ForEach(player => player.GivePreferenceCard(this.PreferencesDeck.Draw()));
+                foreach (PlayerBase player in this.Players)
+                {
+                    player.GivePreferenceCard(this.PreferencesDeck.Draw());
+                }
             }
         }
 

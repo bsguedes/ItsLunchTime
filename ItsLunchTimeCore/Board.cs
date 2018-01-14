@@ -143,8 +143,6 @@ namespace ItsLunchTimeCore
         internal void AddCashToPlayer(int cash, PlayerBase player)
         {
             this._playerCash[player] += cash;
-            if (this._playerCash[player] < 0)
-                Console.WriteLine("stop");
         }
 
         internal bool HasMajority(DayOfWeek day)

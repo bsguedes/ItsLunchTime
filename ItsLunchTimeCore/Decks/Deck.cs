@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ItsLunchTimeCore.Decks
 {
     internal abstract class Deck<T> where T : Card
     {
+        public int RemainingCards
+        {
+            get
+            {
+                return this.Cards.Count;
+            }
+        }
+
         internal Deck()
         {
             this.Cards = new List<T>();

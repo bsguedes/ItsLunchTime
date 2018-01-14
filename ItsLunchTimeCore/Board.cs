@@ -10,7 +10,7 @@ namespace ItsLunchTimeCore
     {
         public int CurrentDay { get; internal set; }
         public DayOfWeek CurrentWeekDay { get { return Extensions.DaysOfWeek[(CurrentDay - 1) % 7]; } }
-        public int TeamScore { get; internal set; }
+        public int TeamScore { get; private set; }
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
         public Home Home { get; }
 
@@ -56,8 +56,20 @@ namespace ItsLunchTimeCore
             }
         }
 
-        public PublicBoard(List<PlayerBase> players)
+        public PublicBoard(List<PlayerBase> players, DifficultyLevel difficulty)
         {
+            switch (difficulty)
+            {
+                case DifficultyLevel.Easy:
+                    this.TeamScore = 10;
+                    break;
+                case DifficultyLevel.Medium:
+                    this.TeamScore = 5;
+                    break;
+                case DifficultyLevel.Hard:
+                    this.TeamScore = 0;
+                    break;
+            }
             this.Players = players;
             this.Home = new Home();
             this._restaurants = new Dictionary<Restaurant, RestaurantPlace>
@@ -72,7 +84,7 @@ namespace ItsLunchTimeCore
             this.Restaurants = new ReadOnlyDictionary<Restaurant, RestaurantPlace>(_restaurants);
 
             this._playerScores = new Dictionary<PlayerBase, int>();
-            players.ForEach(player => this._playerScores.Add(player, 0));
+            players.ForEach(player => this._playerScores.Add(player, Game.STARTING_SCORE));
             this.PlayerScores = new ReadOnlyDictionary<PlayerBase, int>(_playerScores);
 
             this._playerCash = new Dictionary<PlayerBase, int>();
@@ -110,6 +122,18 @@ namespace ItsLunchTimeCore
             this.RestaurantTracks = new ReadOnlyDictionary<Restaurant, RestaurantTrack>(_restaurantTracks);
         }
 
+        internal void AddTeamScore(int v)
+        {
+            this.TeamScore += v;
+            if (this.TeamScore >= Game.MAX_TEAM_SCORE)
+            {
+                this.TeamScore = Game.MAX_TEAM_SCORE;
+            }
+            if (this.TeamScore < 0)
+            {
+                this.TeamScore = 0;
+            }
+        }
 
         internal void AddVictoryPointsToPlayer(int points, PlayerBase player)
         {
@@ -119,6 +143,8 @@ namespace ItsLunchTimeCore
         internal void AddCashToPlayer(int cash, PlayerBase player)
         {
             this._playerCash[player] += cash;
+            if (this._playerCash[player] < 0)
+                Console.WriteLine("stop");
         }
 
         internal bool HasMajority(DayOfWeek day)
@@ -200,6 +226,15 @@ namespace ItsLunchTimeCore
         {
             Restaurant? majorityRestaurant = RestaurantWithMajority(day);
             return majorityRestaurant != null ? Restaurants[majorityRestaurant.Value].Visitors[day].Contains(player) : false;
+        }
+
+        internal bool IsPlayerAlone(DayOfWeek day, PlayerBase player)
+        {
+            if (Home.Visitors[day].Contains(player))
+            {
+                return true;
+            }
+            return VisitedPlaces[player][day].Visitors.Count == 1;
         }
 
         internal Restaurant? RestaurantWithMajority(DayOfWeek day)

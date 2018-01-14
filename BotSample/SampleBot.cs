@@ -51,9 +51,9 @@ namespace BotSample
             return this._prefCards.First();
         }
 
-        protected override int ChooseDessert(PublicBoard board, IEnumerable<DessertCard> cards)
+        protected override List<int> ChooseDessert(PublicBoard board, IEnumerable<DessertCard> cards, int amountToTake)
         {
-            return 0;
+            return Enumerable.Range(0, amountToTake).ToList();
         }
 
         protected override TeamBonusCard ChooseOneTeamBonus(PublicBoard board, TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2)
@@ -107,6 +107,10 @@ namespace BotSample
                         preferenceHistogram.Preferences[r] += 10;
                     }
                 }
+                if (this._loyaltyCards.First().Restaurant == restaurant)
+                {
+                    preferenceHistogram.Preferences[r] += 30;
+                }
                 if (last != null)
                 {
                     foreach (PreferenceHistogram pref in last)
@@ -116,8 +120,22 @@ namespace BotSample
                             preferenceHistogram.Preferences[histogramEntry.Key] += (histogramEntry.Value * i) / 10;
                         }
                     }
+                }                
+            }
+            foreach(Restaurant restaurant in Extensions.Restaurants.Scramble())
+            {
+                RestaurantPlace r = board.Restaurants[restaurant];
+                RestaurantDailyModifierCard modifier = r.Modifier;
+                int cost = r.Cost;
+                if (modifier is OneDollarDiscount && modifier.Days.Contains(board.CurrentWeekDay))
+                {
+                    cost--;
                 }
-                if (r.Cost > board.PlayerCash[this])
+                if (modifier is OneDollarIncrease && modifier.Days.Contains(board.CurrentWeekDay))
+                {
+                    cost++;
+                }
+                if (cost > board.PlayerCash[this])
                 {
                     preferenceHistogram.Preferences[r] = 0;
                 }

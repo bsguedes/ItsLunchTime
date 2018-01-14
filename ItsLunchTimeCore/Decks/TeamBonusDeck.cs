@@ -222,22 +222,22 @@ namespace ItsLunchTimeCore.Decks
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
             Dictionary<PlayerBase, Dictionary<PlayerBase, int>> _opinion = new Dictionary<PlayerBase, Dictionary<PlayerBase, int>>();
-            board.Players.ForEach(player =>
-           {
-               _opinion.Add(player, player.AskOpinionForDonationTeamObjective(board));
-           });
+            foreach (PlayerBase player in board.Players)
+            {
+                _opinion.Add(player, player.AskOpinionForDonationTeamObjective(board));
+            }
 
             Dictionary<PlayerBase, int> _intents = new Dictionary<PlayerBase, int>();
-            board.Players.ForEach(player =>
+            foreach (PlayerBase player in board.Players)
             {
                 _intents.Add(player, player.AskForDonationTeamObjectiveIntent(board, _opinion));
-            });
+            }
 
             Dictionary<PlayerBase, int> _response = new Dictionary<PlayerBase, int>();
-            board.Players.ForEach(player =>
+            foreach (PlayerBase player in board.Players)
             {
                 _response.Add(player, player.AskForDonationTeamObjective(board, _opinion, _intents));
-            });
+            }
 
             while (_response.Values.Sum() > 7)
             {

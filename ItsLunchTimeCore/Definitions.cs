@@ -62,19 +62,6 @@ namespace ItsLunchTimeCore
             { Character.WarehouseManager, 60 },
         };
 
-        public static void Times(this int n, Action<int> action)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                action(i);
-            }
-        }
-
-        public static void Times(this int n, Action action)
-        {
-            n.Times((i) => action());
-        }
-
         public static bool ActionForCharacter(this IEnumerable<PlayerBase> players, Character character, Action<PlayerBase> action)
         {
             foreach (PlayerBase player in players)

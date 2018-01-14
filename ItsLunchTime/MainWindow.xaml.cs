@@ -19,7 +19,7 @@ namespace ItsLunchTime
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             List<PlayerBase> players = new List<PlayerBase>() { new SampleBot(), new SampleBot(), new SampleBot() };
-            Game game = new Game(players, DifficultyLevel.Easy);
+            Game game = new Game(players, DifficultyLevel.Medium);
         }
     }
 }

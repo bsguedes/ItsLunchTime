@@ -18,6 +18,9 @@ namespace ItsLunchTimeCore
         private Dictionary<Restaurant, RestaurantPlace> _restaurants;
         public ReadOnlyDictionary<Restaurant, RestaurantPlace> Restaurants { get; }
 
+        private Dictionary<PlayerBase, Dictionary<VictoryPointsSource, int>> _separatedScores;
+        public Dictionary<PlayerBase, Dictionary<VictoryPointsSource, int>> SeparatedScores => _separatedScores;
+
         private Dictionary<PlayerBase, int> _playerScores;
         public ReadOnlyDictionary<PlayerBase, int> PlayerScores { get; }
 
@@ -122,6 +125,16 @@ namespace ItsLunchTimeCore
                 { Restaurant.JoeAndLeos, new RestaurantTrack(this.Players, new int[] { 2, 4, 6 }, 4) }
             };
             this.RestaurantTracks = new ReadOnlyDictionary<Restaurant, RestaurantTrack>(_restaurantTracks);
+
+            _separatedScores = new Dictionary<PlayerBase, Dictionary<VictoryPointsSource, int>>();
+            Players.ForEach(player =>
+            {
+                _separatedScores.Add(player, new Dictionary<VictoryPointsSource, int>());
+                foreach (VictoryPointsSource v in Enum.GetValues(typeof(VictoryPointsSource)))
+                {
+                    _separatedScores[player].Add(v, 0);
+                }
+            });
         }
 
         internal void AddTeamScore(int v)
@@ -137,8 +150,9 @@ namespace ItsLunchTimeCore
             }
         }
 
-        internal void AddVictoryPointsToPlayer(int points, PlayerBase player)
+        internal void AddVictoryPointsToPlayer(int points, PlayerBase player, VictoryPointsSource source)
         {
+            this._separatedScores[player][source] += points;
             this._playerScores[player] += points;
         }
 
@@ -149,7 +163,7 @@ namespace ItsLunchTimeCore
                 throw new CantSpendCashException();
             }
             this._playerCash[player] += cash;
-            
+
         }
 
         internal bool HasMajority(DayOfWeek day)
@@ -239,7 +253,7 @@ namespace ItsLunchTimeCore
             {
                 return true;
             }
-            return VisitedPlaces[player][day].Visitors.Count == 1;
+            return VisitedPlaces[player][day].Visitors[day].Count == 1;
         }
 
         internal Restaurant? RestaurantWithMajority(DayOfWeek day)
@@ -257,6 +271,7 @@ namespace ItsLunchTimeCore
         internal void SetNewPlayerBonuses(IList<PlayerBonusCard> bonuses)
         {
             this._currentPlayerBonuses.Clear();
+            this._currentPlayerBonuses.AddRange(bonuses);
         }
     }
 }

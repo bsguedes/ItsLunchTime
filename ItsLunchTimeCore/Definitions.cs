@@ -4,6 +4,19 @@ using System.Linq;
 
 namespace ItsLunchTimeCore
 {
+    public enum VictoryPointsSource
+    {
+        DailyModifier,
+        Money,
+        Dessert,
+        PlayerBonus,
+        LoyaltyCard,
+        PreferenceCard,
+        Punishment,
+        Food,
+        Character
+    }
+
     public enum DifficultyLevel
     {
         Easy,

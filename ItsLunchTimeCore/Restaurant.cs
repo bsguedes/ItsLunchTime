@@ -40,9 +40,15 @@ namespace ItsLunchTimeCore
             }
         }
 
-        internal void ClearFood()
+        internal void ClearRestaurant()
         {
             this._menu.Clear();
+            this._visitors.Clear();
+            foreach (DayOfWeek dow in Extensions.Weekdays)
+            {
+                _list_visitors[dow] = new List<PlayerBase>();
+                this._visitors.Add(dow, new ReadOnlyCollection<PlayerBase>(_list_visitors[dow]));
+            }
         }
 
         internal void AddFoodToMenu(FoodType food)
@@ -75,7 +81,7 @@ namespace ItsLunchTimeCore
         }
 
         public FoodType BaseFood { get; }
-        public string Name { get; }        
+        public string Name { get; }
         public Restaurant Identifier { get; }
         public RestaurantDailyModifierCard Modifier { get; private set; }
 

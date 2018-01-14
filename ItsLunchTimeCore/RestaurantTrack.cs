@@ -26,7 +26,10 @@ namespace ItsLunchTimeCore
 
         internal bool AdvancePlayer(PlayerBase player)
         {
-            this._scores[player]++;
+            if (this._scores[player] < Game.MAX_TRACK_LEVEL)
+            {
+                this._scores[player]++;
+            }
             return RewardLevels.Contains(this._scores[player]);
         }
     }

@@ -7,8 +7,10 @@ namespace ItsLunchTimeCore
 {
     public class Game
     {
-        public readonly int MAX_WEEKS = 4;
-        public readonly int DAYS_IN_WEEK = 5;
+        public static readonly int MAX_WEEKS = 4;
+        public static readonly int DAYS_IN_WEEK = 5;
+        public static readonly int DESSERT_BUFFET_SIZE = 5;
+        public static readonly int MAX_TRACK_LEVEL = 7;
 
         internal PublicBoard PublicBoard { get; }
         internal FavoriteFoodDeck FoodDeck { get; }
@@ -47,7 +49,7 @@ namespace ItsLunchTimeCore
             PlayerBonusDeck = new PlayerBonusDeck();
             RestaurantDailyModifierDeck = new RestaurantDailyModifierDeck();
             DessertDeck = new DessertDeck(players.Count);
-            DessertBuffet = new DessertBuffet(5, DessertDeck);
+            DessertBuffet = new DessertBuffet(DESSERT_BUFFET_SIZE, DessertDeck);
             DessertsPerPlayer = new Dictionary<PlayerBase, List<DessertCard>>();
             Players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
             PublicBoard.CurrentDay = 0;

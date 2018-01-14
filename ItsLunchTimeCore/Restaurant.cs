@@ -21,9 +21,11 @@ namespace ItsLunchTimeCore
         private Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> _visitors;
         private Dictionary<DayOfWeek, List<PlayerBase>> _list_visitors;
         private List<FoodType> _menu;
+        public int BaseCost { get; }
 
         internal Place(int cost)
         {
+            this.BaseCost = cost;
             this.Cost = cost;
             this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>();
             this._list_visitors = new Dictionary<DayOfWeek, List<PlayerBase>>();
@@ -55,7 +57,7 @@ namespace ItsLunchTimeCore
 
         public ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>> Visitors { get; private set; }
         public ReadOnlyCollection<FoodType> Menu { get; }
-        public int Cost { get; }
+        public int Cost { get; internal set; }
 
         internal bool HasPlayerVisited(PlayerBase player, DayOfWeek dayOfWeek)
         {
@@ -65,24 +67,30 @@ namespace ItsLunchTimeCore
 
     public class RestaurantPlace : Place
     {
-        internal RestaurantPlace(int cost, FoodType baseFood) : base(cost)
+        internal RestaurantPlace(Restaurant identifier, int cost, FoodType baseFood) : base(cost)
         {
             this.BaseFood = baseFood;
             this.AddFoodToMenu(baseFood);
+            this.Identifier = identifier;
         }
 
         public FoodType BaseFood { get; }
         public string Name { get; }
         public int Price { get; private set; }
         public Restaurant Identifier { get; }
-        public RestaurantDailyModifierCard Modifier { get; private set;  }
+        public RestaurantDailyModifierCard Modifier { get; private set; }
 
-        internal int AdjustPrice(int count)
+        internal void AdjustPrice(int count)
         {
+            int adjust = 0;
             int visitorCount = this.Visitors.Values.Sum(x => x.Count);
-            if (visitorCount <= count - 1) return -1;
-            if (visitorCount >= count + 2) return 1;
-            return 0;
+            if (visitorCount <= count - 1) adjust = -1;
+            if (visitorCount >= count + 2) adjust = 1;
+
+            if (!(this.Cost + adjust < BaseCost - 1 || this.Cost + adjust > BaseCost + 1))
+            {
+                this.Cost += adjust;
+            }
         }
 
         internal void SetDailyModifier(RestaurantDailyModifierCard card)

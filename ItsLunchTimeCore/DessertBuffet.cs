@@ -19,9 +19,10 @@ namespace ItsLunchTimeCore
             _buffet = new List<DessertCard>(buffer_size);
             this.Buffet = new ReadOnlyCollection<DessertCard>(_buffet);
             this.DessertDeck = deck;
+            this.RevealCards(this.BuffetSize);
         }
 
-        internal void RevealCards(int amount)
+        private void RevealCards(int amount)
         {
             this.BuffetSize.Times(() => this._buffet.Add(DessertDeck.Draw()));
         }

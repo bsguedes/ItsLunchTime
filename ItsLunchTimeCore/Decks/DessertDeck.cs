@@ -10,7 +10,8 @@ namespace ItsLunchTimeCore.Decks
 
         public DessertDeck(int count)
         {
-            this.DessertCount = count;
+            this.DessertCount = count;            
+            this.Cards.AddRange(GetCards());
         }
 
         internal override IEnumerable<DessertCard> GetCards()

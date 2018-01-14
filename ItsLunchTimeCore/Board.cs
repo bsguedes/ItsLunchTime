@@ -62,12 +62,12 @@ namespace ItsLunchTimeCore
             this.Home = new Home();
             this._restaurants = new Dictionary<Restaurant, RestaurantPlace>
             {
-                { Restaurant.Russo, new RestaurantPlace(2, FoodType.Brazilian) },
-                { Restaurant.Palatus, new RestaurantPlace(3, FoodType.Pasta) },
-                { Restaurant.GustoDiBacio, new RestaurantPlace(4, FoodType.Pizza) },
-                { Restaurant.Silva, new RestaurantPlace(4, FoodType.Burger) },
-                { Restaurant.Panorama, new RestaurantPlace(5, FoodType.Chinese) },
-                { Restaurant.JoeAndLeos, new RestaurantPlace(6, FoodType.Vegetarian) }
+                { Restaurant.Russo, new RestaurantPlace(Restaurant.Russo, 2, FoodType.Brazilian) },
+                { Restaurant.Palatus, new RestaurantPlace(Restaurant.Palatus, 3, FoodType.Pasta) },
+                { Restaurant.GustoDiBacio, new RestaurantPlace(Restaurant.GustoDiBacio, 4, FoodType.Pizza) },
+                { Restaurant.Silva, new RestaurantPlace(Restaurant.Silva, 4, FoodType.Burger) },
+                { Restaurant.Panorama, new RestaurantPlace(Restaurant.Panorama, 5, FoodType.Chinese) },
+                { Restaurant.JoeAndLeos, new RestaurantPlace(Restaurant.JoeAndLeos, 6, FoodType.Vegetarian) }
             };
             this.Restaurants = new ReadOnlyDictionary<Restaurant, RestaurantPlace>(_restaurants);
 

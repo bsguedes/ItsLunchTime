@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ItsLunchTimeCore.Decks;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ItsLunchTimeCore
@@ -8,6 +10,7 @@ namespace ItsLunchTimeCore
         public PlayerBase Player { get; internal set; }
         public Dictionary<Place, int> Preferences { get; private set; }
         public bool Normalized { get; private set; }
+        PublicBoard _board;
 
         private PreferenceHistogram()
         {
@@ -17,6 +20,7 @@ namespace ItsLunchTimeCore
 
         public PreferenceHistogram(PublicBoard board) : this()
         {
+            this._board = board;
             this.Preferences = new Dictionary<Place, int>
             {
                 { board.Home, 0 }
@@ -24,14 +28,6 @@ namespace ItsLunchTimeCore
             foreach (RestaurantPlace restaurant in board.Restaurants.Values)
             {
                 this.Preferences.Add(restaurant, 0);
-            }
-        }
-
-        public PreferenceHistogram(Dictionary<Place, int> dict) : this()
-        {
-            if (dict.Values.Sum() == 100)
-            {
-                this.Preferences = dict;
             }
         }
 
@@ -48,7 +44,8 @@ namespace ItsLunchTimeCore
 
             if (sum == 0)
             {
-                throw new ZeroSumException();
+                this.Preferences[this.Preferences.Keys.First(x => x is Home)] = 100;
+                return this;
             }
 
             Dictionary<Place, int> dict = new Dictionary<Place, int>();
@@ -59,10 +56,9 @@ namespace ItsLunchTimeCore
             }
             while (dict.Values.Sum() > 100)
             {
-                dict[dict.OrderByDescending(x => x.Value).Last().Key]--;
+                dict[dict.Where(x => x.Value > 0).OrderByDescending(x => x.Value).Last().Key]--;
             }
-            this.Preferences = dict;
-
+            this.Preferences = dict;            
             return this;
         }
     }

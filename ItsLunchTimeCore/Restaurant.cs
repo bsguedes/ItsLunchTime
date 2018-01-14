@@ -75,8 +75,7 @@ namespace ItsLunchTimeCore
         }
 
         public FoodType BaseFood { get; }
-        public string Name { get; }
-        public int Price { get; private set; }
+        public string Name { get; }        
         public Restaurant Identifier { get; }
         public RestaurantDailyModifierCard Modifier { get; private set; }
 

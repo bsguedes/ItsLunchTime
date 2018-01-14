@@ -1,5 +1,6 @@
 ﻿using ItsLunchTimeCore;
 using ItsLunchTimeCore.Decks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,12 +33,12 @@ namespace BotSample
 
         protected override int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion)
         {
-            return 7 / board.Players.Count + 1;
+            return Math.Min(7 / board.Players.Count + 1, board.PlayerCash[this]);
         }
 
         protected override int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents)
         {
-            return 7 / board.Players.Count + 1;
+            return Math.Min(7 / board.Players.Count + 1, board.PlayerCash[this]);
         }
 
         protected override LoyaltyCard AskLoyalty(PublicBoard board)
@@ -65,44 +66,45 @@ namespace BotSample
             PreferenceHistogram preferenceHistogram = new PreferenceHistogram(board);
             foreach (Restaurant restaurant in Extensions.Restaurants.Scramble())
             {
-                RestaurantDailyModifierCard modifier = board.Restaurants[restaurant].Modifier;
+                RestaurantPlace r = board.Restaurants[restaurant];
+                RestaurantDailyModifierCard modifier = r.Modifier;
                 if (modifier is OneVictoryPointBonus && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 10;
+                    preferenceHistogram.Preferences[r] += 10;
                 }
                 if (modifier is OneTeamPointIfMajority && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 20;
+                    preferenceHistogram.Preferences[r] += 20;
                 }
                 if (modifier is OneDollarDiscount && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 10;
+                    preferenceHistogram.Preferences[r] += 10;
                 }
                 if (modifier is DoesNotAdvanceTrackPlus2VictoryPoints && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 20;
+                    preferenceHistogram.Preferences[r] += 20;
                 }
                 if (this._prefCards.First().FirstPreference == restaurant)
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 40;
+                    preferenceHistogram.Preferences[r] += 40;
                 }
                 if (this._prefCards.First().SecondPreference == restaurant)
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 20;
+                    preferenceHistogram.Preferences[r] += 20;
                 }
                 if (this._prefCards.First().Undesired == restaurant)
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] /= 2;
+                    preferenceHistogram.Preferences[r] /= 2;
                 }
                 if (modifier is OneDollarIncrease && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] /= 2;
+                    preferenceHistogram.Preferences[r] /= 2;
                 }
                 foreach (FoodType food in _foodCards.Select(x => x.Type).Distinct())
                 {
-                    if (board.Restaurants[restaurant].Menu.Contains(food))
+                    if (r.Menu.Contains(food))
                     {
-                        preferenceHistogram.Preferences[board.Restaurants[restaurant]] += 10;
+                        preferenceHistogram.Preferences[r] += 10;
                     }
                 }
                 if (last != null)
@@ -115,9 +117,13 @@ namespace BotSample
                         }
                     }
                 }
+                if (r.Cost > board.PlayerCash[this])
+                {
+                    preferenceHistogram.Preferences[r] = 0;
+                }
                 if (modifier is Closed && modifier.Days.Contains(board.CurrentWeekDay))
                 {
-                    preferenceHistogram.Preferences[board.Restaurants[restaurant]] = 0;
+                    preferenceHistogram.Preferences[r] = 0;
                 }
             }
             return preferenceHistogram.Normalize();

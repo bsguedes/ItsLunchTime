@@ -47,6 +47,7 @@ namespace ItsLunchTimeCore
         public static readonly Restaurant[] Restaurants = new Restaurant[] { Restaurant.Russo, Restaurant.Palatus, Restaurant.GustoDiBacio, Restaurant.Silva, Restaurant.Panorama, Restaurant.JoeAndLeos };
         public static readonly FoodType[] FoodTypes = new FoodType[] { FoodType.Brazilian, FoodType.Burger, FoodType.Chinese, FoodType.Pasta, FoodType.Pizza, FoodType.Vegetarian };
         public static readonly DessertType[] DessertTypes = new DessertType[] { DessertType.Cake, DessertType.Coffee, DessertType.Cream, DessertType.IceCream, DessertType.Pudding, DessertType.Sago };
+        public static readonly Character[] CharacterTypes = new Character[] { Character.CEO, Character.Environment, Character.Finance, Character.ForeignAffairs, Character.HR, Character.Intern, Character.Marketing, Character.Programmer, Character.SalesRep, Character.WarehouseManager };
 
         public static readonly Dictionary<Character, int> StartingMoney = new Dictionary<Character, int>
         {
@@ -73,6 +74,15 @@ namespace ItsLunchTimeCore
                 }
             }
             return false;
+        }
+
+        public static int Fibonacci(this int i)
+        {
+            if (i > 1)
+            {
+                return (i - 1).Fibonacci() + (i - 2).Fibonacci();
+            }
+            return 1;
         }
 
         public static int Terminal(this int i)

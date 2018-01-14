@@ -19,6 +19,11 @@ namespace ItsLunchTimeCore
 
     public abstract class PlayerBase
     {
+        protected PlayerBase(Character character)
+        {
+            this.Character = character;
+        }
+
         public PlayerBase Left { get; internal set; }
         public PlayerBase Right { get; internal set; }
 
@@ -36,7 +41,10 @@ namespace ItsLunchTimeCore
         protected internal abstract Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board);
         protected internal abstract int AskForDonationTeamObjectiveIntent(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion);
         protected internal abstract int AskForDonationTeamObjective(PublicBoard board, Dictionary<PlayerBase, Dictionary<PlayerBase, int>> opinion, Dictionary<PlayerBase, int> intents);
+
         protected internal abstract TeamBonusCard ChooseOneTeamBonus(PublicBoard board, TeamBonusCard teamBonusCard1, TeamBonusCard teamBonusCard2);
+        protected internal abstract Restaurant ChooseRestaurantToAdvanceTrack(PublicBoard publicBoard);
+        protected internal abstract bool ShouldSwitchCashForVPAndTP(PublicBoard board, int cash, int vp, int tp);
     }
 
 }

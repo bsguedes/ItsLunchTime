@@ -144,7 +144,12 @@ namespace ItsLunchTimeCore
 
         internal void AddCashToPlayer(int cash, PlayerBase player)
         {
+            if (this._playerCash[player] + cash < 0)
+            {
+                throw new CantSpendCashException();
+            }
             this._playerCash[player] += cash;
+            
         }
 
         internal bool HasMajority(DayOfWeek day)

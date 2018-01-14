@@ -111,12 +111,28 @@ namespace ItsLunchTimeCore
         private void CalculateFinalScore()
         {
             EvaluateDesserts();
+            ConvertCashToVP();
 
             Console.WriteLine("Scores:");
             Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerScores.Select(x => x.Value)));
             Console.WriteLine("Cash:");
             Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerCash.Select(x => x.Value)));
             Console.WriteLine("Team score: {0}", this.PublicBoard.TeamScore);
+        }
+
+        private void ConvertCashToVP()
+        {
+            foreach (PlayerBase player in Players)
+            {
+                if (player.Character == Character.Marketing)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(PublicBoard.PlayerCash[player], player);
+                }
+                else
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(PublicBoard.PlayerCash[player] / 2, player);
+                }
+            }
         }
 
         private void EvaluateDesserts()
@@ -150,6 +166,11 @@ namespace ItsLunchTimeCore
                 }
 
                 _iceCreamDict.Add(player, _dessertCards[player].Where(x => x == DessertType.IceCream).Count());
+
+                if (player.Character == Character.Intern)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(2 * _dessertCards[player].Count, player);
+                }
             }
             PlayerBase[] ordered = _iceCreamDict.OrderByDescending(x => x.Value).Select(x => x.Key).ToArray();
             IEnumerable<PlayerBase> _tiedAsFirst = ordered.Where(y => _iceCreamDict[y] == _iceCreamDict[ordered[0]]);
@@ -180,7 +201,31 @@ namespace ItsLunchTimeCore
                     if (playerBonus.HasCompletedForPlayer(player, PublicBoard))
                     {
                         this.PublicBoard.AddVictoryPointsToPlayer(playerBonus.Points, player);
+                        if (player.Character == Character.WarehouseManager)
+                        {
+                            Restaurant restaurant = player.ChooseRestaurantToAdvanceTrack(PublicBoard);
+                            if (this.PublicBoard.RestaurantTracks[restaurant].AdvancePlayer(player))
+                            {
+                                List<DessertCard> cards = new List<DessertCard>();
+                                List<int> chosenCardIndex = player.ChooseDessert(this.PublicBoard, this.DessertBuffet.TakeChoices(this.PublicBoard.RestaurantTracks[restaurant].CardAmount), 1);
+                                List<DessertCard> chosenCards = this.DessertBuffet.RemoveDessertAtIndexes(chosenCardIndex);
+                                DessertsPerPlayer[player].AddRange(chosenCards);
+                            }
+                        }
+                        if (player.Character == Character.Finance)
+                        {
+                            PublicBoard.AddCashToPlayer(4, player);
+                        }
                     }
+                }
+            }
+
+            foreach (PlayerBase player in this.Players)
+            {
+                if (player.Character == Character.ForeignAffairs)
+                {
+                    int count = PublicBoard.VisitedPlaces[player].Select(x => x.Value).Where(x => x is RestaurantPlace).Distinct().Count();
+                    PublicBoard.AddVictoryPointsToPlayer(count.Fibonacci(), player);
                 }
             }
         }
@@ -191,6 +236,7 @@ namespace ItsLunchTimeCore
             {
                 PublicBoard.AddTeamScore(2);
                 PublicBoard.TeamBonusDoneCount++;
+                Players.ActionForCharacter(Character.HR, (player) => PublicBoard.AddVictoryPointsToPlayer(2, player));
             }
             else
             {
@@ -302,6 +348,44 @@ namespace ItsLunchTimeCore
                     }
                 }
             }
+
+            Players.ActionForCharacter(Character.HR, player =>
+            {
+                if (PublicBoard.IsPlayerInMajority(day, player))
+                {
+                    if (player.ShouldSwitchCashForVPAndTP(PublicBoard, -1, 1, 0))
+                    {
+                        PublicBoard.AddCashToPlayer(-1, player);
+                        PublicBoard.AddVictoryPointsToPlayer(1, player);
+                    }
+                }
+            });
+            Players.ActionForCharacter(Character.Marketing, player =>
+            {
+                if (!PublicBoard.IsPlayerInMajority(day, player))
+                {
+                    if (player.ShouldSwitchCashForVPAndTP(PublicBoard, -3, 2, 1))
+                    {
+                        PublicBoard.AddCashToPlayer(-3, player);
+                        PublicBoard.AddVictoryPointsToPlayer(2, player);
+                        PublicBoard.AddTeamScore(1);
+                    }
+                }
+            });
+            Players.ActionForCharacter(Character.Programmer, player =>
+            {
+                if (!PublicBoard.IsPlayerInMajority(day, player) && !PublicBoard.IsPlayerAlone(day, player))
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(3, player);
+                }
+            });
+            Players.ActionForCharacter(Character.Environment, player =>
+            {
+                if (PublicBoard.VisitedPlaces[player][day].Menu.Contains(FoodType.Vegetarian))
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(3, player);
+                }
+            });
         }
 
         private void ScoreDailyModifiers(DayOfWeek day)
@@ -326,7 +410,7 @@ namespace ItsLunchTimeCore
         private void ScoreTeamPoints(DayOfWeek day)
         {
             int net_score = 0;
-            net_score += 1 * (PublicBoard.HasMajority(day) ? 1 : -1);
+            net_score += 1 * (PublicBoard.HasMajority(day) ? 1 : -1);            
             if (PublicBoard.HasUnanimity(day))
             {
                 net_score++;
@@ -356,6 +440,10 @@ namespace ItsLunchTimeCore
                         cost--;
                     }
                     cost += restaurant.Cost;
+                    if (cost >= 4 && player.Character == Character.CEO)
+                    {
+                        cost--;
+                    }
                 }
                 PublicBoard.AddCashToPlayer(-cost, player);
             };

@@ -1,7 +1,7 @@
-﻿using BotAgressive;
-using BotSample;
+﻿using BotSample;
 using ItsLunchTimeCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace ItsLunchTime
@@ -18,7 +18,11 @@ namespace ItsLunchTime
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            List<PlayerBase> players = new List<PlayerBase>() { new SampleBot(), new SampleBot(), new SampleBot() };
+            IEnumerable<Character> characters = Extensions.CharacterTypes.Scramble();
+            PlayerBase playerA = new SampleBot(characters.ElementAt(0));
+            PlayerBase playerB = new SampleBot(characters.ElementAt(1));
+            PlayerBase playerC = new SampleBot(characters.ElementAt(2));
+            List<PlayerBase> players = new List<PlayerBase>() { playerA, playerB, playerC };
             Game game = new Game(players, DifficultyLevel.Medium);
         }
     }

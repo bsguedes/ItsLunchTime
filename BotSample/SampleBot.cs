@@ -12,6 +12,10 @@ namespace BotSample
         List<LoyaltyCard> _loyaltyCards;
         List<PreferenceCard> _prefCards;
 
+        public SampleBot(Character character) : base(character)
+        {
+        }
+
         protected override void SignalNewWeek(PublicBoard board)
         {
             this._foodCards = new List<FoodCard>();
@@ -21,7 +25,14 @@ namespace BotSample
 
         protected override List<FoodType> AskFavoriteFood(PublicBoard board)
         {
-            return new List<FoodType> { this._foodCards.First().Type };
+            if (Character == Character.SalesRep)
+            {
+                return new List<FoodType> { this._foodCards.First().Type, this._foodCards.Last().Type };
+            }
+            else
+            {
+                return new List<FoodType> { this._foodCards.First().Type };
+            }
         }
 
         protected override Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board)
@@ -120,9 +131,9 @@ namespace BotSample
                             preferenceHistogram.Preferences[histogramEntry.Key] += (histogramEntry.Value * i) / 10;
                         }
                     }
-                }                
+                }
             }
-            foreach(Restaurant restaurant in Extensions.Restaurants.Scramble())
+            foreach (Restaurant restaurant in Extensions.Restaurants.Scramble())
             {
                 RestaurantPlace r = board.Restaurants[restaurant];
                 RestaurantDailyModifierCard modifier = r.Modifier;
@@ -162,6 +173,14 @@ namespace BotSample
             this._prefCards.Add(preferenceCard);
         }
 
+        protected override Restaurant ChooseRestaurantToAdvanceTrack(PublicBoard publicBoard)
+        {
+            return Restaurant.JoeAndLeos;
+        }
 
+        protected override bool ShouldSwitchCashForVPAndTP(PublicBoard board, int cash, int vp, int tp)
+        {
+            return board.PlayerCash[this] + cash >= 0;
+        }
     }
 }

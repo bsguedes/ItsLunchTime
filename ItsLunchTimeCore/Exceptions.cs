@@ -19,4 +19,10 @@ namespace ItsLunchTimeCore
     {
 
     }
+
+    [Serializable]
+    public class CantSpendCashException : Exception
+    {
+
+    }
 }

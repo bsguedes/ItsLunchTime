@@ -7,6 +7,10 @@ namespace BotAgressive
 {
     public class AgressiveBot : PlayerBase
     {
+        protected AgressiveBot(Character character) : base(character)
+        {
+        }
+
         protected override List<FoodType> AskFavoriteFood(PublicBoard board)
         {
             throw new NotImplementedException();
@@ -47,6 +51,11 @@ namespace BotAgressive
             throw new NotImplementedException();
         }
 
+        protected override Restaurant ChooseRestaurantToAdvanceTrack(PublicBoard publicBoard)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override PreferenceHistogram GetPreferenceHistogram(PublicBoard board, int iteration, IEnumerable<PreferenceHistogram> last)
         {
             throw new NotImplementedException();
@@ -63,6 +72,11 @@ namespace BotAgressive
         }
 
         protected override void GivePreferenceCard(PreferenceCard preferenceCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool ShouldSwitchCashForVPAndTP(PublicBoard board, int cash, int vp, int tp)
         {
             throw new NotImplementedException();
         }

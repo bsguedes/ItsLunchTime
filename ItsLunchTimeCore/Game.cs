@@ -61,7 +61,7 @@ namespace ItsLunchTimeCore
             TeamBonusDeck = new TeamBonusDeck();
             PlayerBonusDeck = new PlayerBonusDeck();
             RestaurantDailyModifierDeck = new RestaurantDailyModifierDeck();
-            DessertDeck = new DessertDeck(players.Count);
+            DessertDeck = new DessertDeck(players.Count + 3);
             DessertBuffet = new DessertBuffet(DESSERT_BUFFET_SIZE, DessertDeck);
             DessertsPerPlayer = new Dictionary<PlayerBase, List<DessertCard>>();
             _players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
@@ -88,6 +88,7 @@ namespace ItsLunchTimeCore
                 {
                     PublicBoard.CurrentDay++;
                     DayOfWeek weekday = Extensions.Weekdays[day];
+
                     ChooseRestaurant(weekday);
                     AdvanceRestaurantTracks(weekday);
                     PayForLunchAndSetMarkers(weekday);
@@ -109,11 +110,65 @@ namespace ItsLunchTimeCore
 
         private void CalculateFinalScore()
         {
+            EvaluateDesserts();
+
             Console.WriteLine("Scores:");
             Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerScores.Select(x => x.Value)));
             Console.WriteLine("Cash:");
             Console.WriteLine(string.Join(" ", this.PublicBoard.PlayerCash.Select(x => x.Value)));
             Console.WriteLine("Team score: {0}", this.PublicBoard.TeamScore);
+        }
+
+        private void EvaluateDesserts()
+        {
+            Dictionary<PlayerBase, int> _iceCreamDict = new Dictionary<PlayerBase, int>();
+            foreach (PlayerBase player in Players)
+            {
+                int coffee_count = Math.Min(4, _dessertCards[player].Where(x => x == DessertType.Coffee).Count());
+                PublicBoard.AddVictoryPointsToPlayer(coffee_count.Terminal(), player);
+
+                int pudding_count = _dessertCards[player].Where(x => x == DessertType.Pudding).Count();
+                PublicBoard.AddVictoryPointsToPlayer(pudding_count * PublicBoard.TeamBonusDoneCount, player);
+
+                int other_cake_count = _dessertCards.Where(x => x.Key != player).Select(x => x.Value.Where(y => y == DessertType.Cake).Count()).Sum();
+                int cake_count = _dessertCards[player].Where(x => x == DessertType.Cake).Count();
+                PublicBoard.AddVictoryPointsToPlayer(cake_count * other_cake_count, player);
+
+                int cream_count = _dessertCards[player].Where(x => x == DessertType.Cream).Count();
+                int left_sago_count = _dessertCards[player.Left].Where(x => x == DessertType.Sago).Count();
+                int right_sago_count = _dessertCards[player.Right].Where(x => x == DessertType.Sago).Count();
+                PublicBoard.AddVictoryPointsToPlayer(cream_count * (1 + 2 * left_sago_count + 2 * right_sago_count), player);
+
+                int sago_count = _dessertCards[player].Where(x => x == DessertType.Sago).Count();
+                if (sago_count == 0)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(-3, player);
+                }
+                else if (sago_count >= 2)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(-1 * sago_count, player);
+                }
+
+                _iceCreamDict.Add(player, _dessertCards[player].Where(x => x == DessertType.IceCream).Count());
+            }
+            PlayerBase[] ordered = _iceCreamDict.OrderByDescending(x => x.Value).Select(x => x.Key).ToArray();
+            IEnumerable<PlayerBase> _tiedAsFirst = ordered.Where(y => _iceCreamDict[y] == _iceCreamDict[ordered[0]]);
+            if (_tiedAsFirst.Count() == 1)
+            {
+                PublicBoard.AddVictoryPointsToPlayer(10, ordered[0]);
+                IEnumerable<PlayerBase> _tiedAsSecond = ordered.Where(y => _iceCreamDict[y] == _iceCreamDict[ordered[1]]);
+                foreach (PlayerBase tiedPlayer in _tiedAsSecond)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(4 / _tiedAsSecond.Count(), tiedPlayer);
+                }
+            }
+            else
+            {
+                foreach (PlayerBase tiedPlayer in _tiedAsFirst)
+                {
+                    PublicBoard.AddVictoryPointsToPlayer(14 / _tiedAsFirst.Count(), tiedPlayer);
+                }
+            }
         }
 
         private void ScorePlayerBonus()
@@ -132,7 +187,15 @@ namespace ItsLunchTimeCore
 
         private void ScoreTeamBonus()
         {
-            PublicBoard.AddTeamScore(PublicBoard.CurrentTeamBonus.HasCompletedTeamBonus(this.PublicBoard) ? 2 : -2);
+            if (PublicBoard.CurrentTeamBonus.HasCompletedTeamBonus(this.PublicBoard))
+            {
+                PublicBoard.AddTeamScore(2);
+                PublicBoard.TeamBonusDoneCount++;
+            }
+            else
+            {
+                PublicBoard.AddTeamScore(-2);
+            }
             PublicBoard.ClearUndesiredRestaurants();
         }
 

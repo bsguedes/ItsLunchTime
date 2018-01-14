@@ -12,6 +12,7 @@ namespace ItsLunchTimeCore
         public DayOfWeek CurrentWeekDay { get { return Extensions.DaysOfWeek[(CurrentDay - 1) % 7]; } }
         public int TeamScore { get; private set; }
         public TeamBonusCard CurrentTeamBonus { get; internal set; }
+        public int TeamBonusDoneCount { get; internal set; }
         public Home Home { get; }
 
         private Dictionary<Restaurant, RestaurantPlace> _restaurants;
@@ -58,6 +59,7 @@ namespace ItsLunchTimeCore
 
         public PublicBoard(List<PlayerBase> players, DifficultyLevel difficulty)
         {
+            TeamBonusDoneCount = 0;
             switch (difficulty)
             {
                 case DifficultyLevel.Easy:

@@ -25,7 +25,7 @@ namespace ItsLunchTimeCore
     {
         Coffee,
         IceCream,
-        Sagu,
+        Sago,
         Cream,
         Pudding,
         Cake
@@ -46,7 +46,7 @@ namespace ItsLunchTimeCore
         public static readonly DayOfWeek[] DaysOfWeek = new DayOfWeek[] { DayOfWeek.Sunday, DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday };
         public static readonly Restaurant[] Restaurants = new Restaurant[] { Restaurant.Russo, Restaurant.Palatus, Restaurant.GustoDiBacio, Restaurant.Silva, Restaurant.Panorama, Restaurant.JoeAndLeos };
         public static readonly FoodType[] FoodTypes = new FoodType[] { FoodType.Brazilian, FoodType.Burger, FoodType.Chinese, FoodType.Pasta, FoodType.Pizza, FoodType.Vegetarian };
-        public static readonly DessertType[] DessertTypes = new DessertType[] { DessertType.Cake, DessertType.Coffee, DessertType.Cream, DessertType.IceCream, DessertType.Pudding, DessertType.Sagu };
+        public static readonly DessertType[] DessertTypes = new DessertType[] { DessertType.Cake, DessertType.Coffee, DessertType.Cream, DessertType.IceCream, DessertType.Pudding, DessertType.Sago };
 
         public static readonly Dictionary<Character, int> StartingMoney = new Dictionary<Character, int>
         {
@@ -73,6 +73,18 @@ namespace ItsLunchTimeCore
                 }
             }
             return false;
+        }
+
+        public static int Terminal(this int i)
+        {
+            if (i <= 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return i + (i - 1).Terminal();
+            }
         }
 
         public static void Shuffle<T>(this IList<T> list)

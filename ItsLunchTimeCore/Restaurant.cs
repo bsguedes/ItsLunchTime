@@ -28,6 +28,7 @@ namespace ItsLunchTimeCore
             this._visitors = new Dictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>();
             this._list_visitors = new Dictionary<DayOfWeek, List<PlayerBase>>();
             Visitors = new ReadOnlyDictionary<DayOfWeek, ReadOnlyCollection<PlayerBase>>(_visitors);
+            this._menu = new List<FoodType>();
             Menu = new ReadOnlyCollection<FoodType>(_menu);
 
             foreach (DayOfWeek dow in Extensions.Weekdays)
@@ -39,7 +40,7 @@ namespace ItsLunchTimeCore
 
         internal void ClearFood()
         {
-            this._menu = new List<FoodType>();
+            this._menu.Clear();
         }
 
         internal void AddFoodToMenu(FoodType food)

@@ -29,12 +29,15 @@ namespace ItsLunchTimeCore
         private Dictionary<PlayerBase, List<FoodType>> _favoriteFood;
         public ReadOnlyDictionary<PlayerBase, List<FoodType>> FavoriteFood { get; }
 
+        private List<PlayerBonusCard> _currentPlayerBonuses;
+        public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; }
+
         private Dictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>> _visitedPlaces;
         private Dictionary<PlayerBase, Dictionary<DayOfWeek, Place>> _internalVisitedPlaces;
         public ReadOnlyDictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>> VisitedPlaces { get; }
 
+        private Dictionary<Restaurant, RestaurantTrack> _restaurantTracks;
         public ReadOnlyDictionary<Restaurant, RestaurantTrack> RestaurantTracks { get; private set; }
-        public ReadOnlyCollection<PlayerBonusCard> CurrentPlayerBonuses { get; private set; }
 
         public List<PlayerBase> Players { get; }
 
@@ -80,6 +83,30 @@ namespace ItsLunchTimeCore
 
             this._favoriteFood = new Dictionary<PlayerBase, List<FoodType>>();
             this.FavoriteFood = new ReadOnlyDictionary<PlayerBase, List<FoodType>>(_favoriteFood);
+
+            this._internalVisitedPlaces = new Dictionary<PlayerBase, Dictionary<DayOfWeek, Place>>();
+            this._visitedPlaces = new Dictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>>();
+            foreach (PlayerBase player in Players)
+            {
+                Dictionary<DayOfWeek, Place> _playerVisitedPlaces = new Dictionary<DayOfWeek, Place>();
+                this._internalVisitedPlaces.Add(player, _playerVisitedPlaces);
+                this._visitedPlaces.Add(player, new ReadOnlyDictionary<DayOfWeek, Place>(_playerVisitedPlaces));
+            }
+            this.VisitedPlaces = new ReadOnlyDictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>>(this._visitedPlaces);
+
+            this._currentPlayerBonuses = new List<PlayerBonusCard>();
+            this.CurrentPlayerBonuses = new ReadOnlyCollection<PlayerBonusCard>(_currentPlayerBonuses);
+
+            this._restaurantTracks = new Dictionary<Restaurant, RestaurantTrack>
+            {
+                { Restaurant.Russo, new RestaurantTrack(this.Players, new int[] { }, 0) },
+                { Restaurant.Palatus, new RestaurantTrack(this.Players, new int[] { 4, 7 }, 2) },
+                { Restaurant.GustoDiBacio, new RestaurantTrack(this.Players, new int[] { 4, 6 }, 2) },
+                { Restaurant.Silva, new RestaurantTrack(this.Players, new int[] { 3, 6 }, 3) },
+                { Restaurant.Panorama, new RestaurantTrack(this.Players, new int[] { 3, 5 }, 3) },
+                { Restaurant.JoeAndLeos, new RestaurantTrack(this.Players, new int[] { 2, 4, 6 }, 4) }
+            };
+            this.RestaurantTracks = new ReadOnlyDictionary<Restaurant, RestaurantTrack>(_restaurantTracks);
         }
 
 
@@ -130,14 +157,15 @@ namespace ItsLunchTimeCore
 
         internal void ClearVisitedPlaces()
         {
-            this._internalVisitedPlaces = new Dictionary<PlayerBase, Dictionary<DayOfWeek, Place>>();
-            this._visitedPlaces = new Dictionary<PlayerBase, ReadOnlyDictionary<DayOfWeek, Place>>();
+            this._internalVisitedPlaces.Clear();
+            this._visitedPlaces.Clear();
             foreach (PlayerBase player in Players)
             {
                 Dictionary<DayOfWeek, Place> _playerVisitedPlaces = new Dictionary<DayOfWeek, Place>();
                 this._internalVisitedPlaces.Add(player, _playerVisitedPlaces);
                 this._visitedPlaces.Add(player, new ReadOnlyDictionary<DayOfWeek, Place>(_playerVisitedPlaces));
             }
+
         }
 
         internal void VisitPlace(PlayerBase player, DayOfWeek day, Place place)
@@ -187,7 +215,7 @@ namespace ItsLunchTimeCore
 
         internal void SetNewPlayerBonuses(IList<PlayerBonusCard> bonuses)
         {
-            this.CurrentPlayerBonuses = new ReadOnlyCollection<PlayerBonusCard>(bonuses);
+            this._currentPlayerBonuses.Clear();
         }
     }
 }

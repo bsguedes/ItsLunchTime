@@ -48,10 +48,12 @@ namespace ItsLunchTimeCore
             DessertDeck = new DessertDeck(players.Count);
             DessertsPerPlayer = new Dictionary<PlayerBase, List<DessertCard>>();
             Players.ForEach((player) => DessertsPerPlayer.Add(player, new List<DessertCard>()));
-            PublicBoard.CurrentDay = 1;
+            PublicBoard.CurrentDay = 0;
 
             MAX_WEEKS.Times(turn_index =>
            {
+               PublicBoard.CurrentDay++;
+               PublicBoard.ClearVisitedPlaces();
                PublicBoard.ClearFavoriteFood();
                _preferenceCards = new Dictionary<PlayerBase, PreferenceCard>();
                _loyaltyCards = new Dictionary<PlayerBase, LoyaltyCard>();
@@ -66,6 +68,7 @@ namespace ItsLunchTimeCore
 
                DAYS_IN_WEEK.Times(day =>
               {
+                  PublicBoard.CurrentDay++;
                   DayOfWeek weekday = Extensions.Weekdays[day];
                   ChooseRestaurant(weekday);
                   AdvanceRestaurantTracks(weekday);
@@ -75,6 +78,7 @@ namespace ItsLunchTimeCore
                   ScoreVPs(weekday);
               });
 
+               PublicBoard.CurrentDay++;
                ReadjustRestaurantPrices();
                ScorePreferencesAndLoyalty();
                ScoreTeamBonus();

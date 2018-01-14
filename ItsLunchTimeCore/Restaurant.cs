@@ -75,7 +75,7 @@ namespace ItsLunchTimeCore
         public string Name { get; }
         public int Price { get; private set; }
         public Restaurant Identifier { get; }
-        public RestaurantDailyModifierCard Modifier { get; internal set; }
+        public RestaurantDailyModifierCard Modifier { get; private set;  }
 
         internal int AdjustPrice(int count)
         {
@@ -83,6 +83,11 @@ namespace ItsLunchTimeCore
             if (visitorCount <= count - 1) return -1;
             if (visitorCount >= count + 2) return 1;
             return 0;
+        }
+
+        internal void SetDailyModifier(RestaurantDailyModifierCard card)
+        {
+            this.Modifier = card;
         }
     }
 

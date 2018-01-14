@@ -85,6 +85,13 @@ namespace ItsLunchTimeCore
                ScorePlayerBonus();
 
            });
+
+            CalculateFinalScore();
+        }
+
+        private void CalculateFinalScore()
+        {
+            throw new NotImplementedException();
         }
 
         private void ScorePlayerBonus()
@@ -296,7 +303,7 @@ namespace ItsLunchTimeCore
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
-                PublicBoard.Restaurants[restaurant].Modifier = this.RestaurantDailyModifierDeck.Draw();
+                PublicBoard.Restaurants[restaurant].SetDailyModifier(this.RestaurantDailyModifierDeck.Draw());
             }
         }
 

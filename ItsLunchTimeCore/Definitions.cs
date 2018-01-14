@@ -48,6 +48,20 @@ namespace ItsLunchTimeCore
         public static readonly FoodType[] FoodTypes = new FoodType[] { FoodType.Brazilian, FoodType.Burger, FoodType.Chinese, FoodType.Pasta, FoodType.Pizza, FoodType.Vegetarian };
         public static readonly DessertType[] DessertTypes = new DessertType[] { DessertType.Cake, DessertType.Coffee, DessertType.Cream, DessertType.IceCream, DessertType.Pudding, DessertType.Sagu };
 
+        public static readonly Dictionary<Character, int> StartingMoney = new Dictionary<Character, int>
+        {
+            { Character.CEO, 60 },
+            { Character.Environment, 60 },
+            { Character.Finance, 60 },
+            { Character.ForeignAffairs, 60 },
+            { Character.HR, 60 },
+            { Character.Intern, 60 },
+            { Character.Marketing, 60 },
+            { Character.Programmer, 60 },
+            { Character.SalesRep, 60 },
+            { Character.WarehouseManager, 60 },
+        };
+
         public static void Times(this int n, Action<int> action)
         {
             for (int i = 0; i < n; i++)

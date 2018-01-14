@@ -76,7 +76,8 @@ namespace ItsLunchTimeCore
             this.PlayerScores = new ReadOnlyDictionary<PlayerBase, int>(_playerScores);
 
             this._playerCash = new Dictionary<PlayerBase, int>();
-            players.ForEach(player => this._playerCash.Add(player, 0));
+            players.ForEach(player => this._playerCash.Add(player, Extensions.StartingMoney[player.Character]));
+            this.PlayerCash = new ReadOnlyDictionary<PlayerBase, int>(this._playerCash);
 
             this._undesiredRestaurants = new Dictionary<PlayerBase, Restaurant>();
             this.UndesiredRestaurants = new ReadOnlyDictionary<PlayerBase, Restaurant>(_undesiredRestaurants);

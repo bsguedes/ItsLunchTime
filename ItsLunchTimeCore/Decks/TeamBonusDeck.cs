@@ -32,7 +32,7 @@ namespace ItsLunchTimeCore.Decks
     {
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
-            throw new System.NotImplementedException();
+            return !board.Restaurants.Any(x => x.Value.Visitors.Count() >= board.Players.Count + 2);
         }
     }
 
@@ -219,29 +219,22 @@ namespace ItsLunchTimeCore.Decks
 
     public class CollectivelyDonate7Cash : TeamBonusCard
     {
-        List<PlayerBase> _players;
-
-        internal void SetPlayers(List<PlayerBase> players)
-        {
-            this._players = players;
-        }
-
         internal override bool HasCompletedTeamBonus(PublicBoard board)
         {
             Dictionary<PlayerBase, Dictionary<PlayerBase, int>> _opinion = new Dictionary<PlayerBase, Dictionary<PlayerBase, int>>();
-            _players.ForEach(player =>
+            board.Players.ForEach(player =>
            {
                _opinion.Add(player, player.AskOpinionForDonationTeamObjective(board));
            });
 
             Dictionary<PlayerBase, int> _intents = new Dictionary<PlayerBase, int>();
-            _players.ForEach(player =>
+            board.Players.ForEach(player =>
             {
                 _intents.Add(player, player.AskForDonationTeamObjectiveIntent(board, _opinion));
             });
 
             Dictionary<PlayerBase, int> _response = new Dictionary<PlayerBase, int>();
-            _players.ForEach(player =>
+            board.Players.ForEach(player =>
             {
                 _response.Add(player, player.AskForDonationTeamObjective(board, _opinion, _intents));
             });

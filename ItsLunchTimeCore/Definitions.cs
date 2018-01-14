@@ -99,7 +99,7 @@ namespace ItsLunchTimeCore
             return 1;
         }
 
-        public static int Terminal(this int i)
+        public static int Termial(this int i)
         {
             if (i <= 0)
             {
@@ -107,7 +107,7 @@ namespace ItsLunchTimeCore
             }
             else
             {
-                return i + (i - 1).Terminal();
+                return i + (i - 1).Termial();
             }
         }
 

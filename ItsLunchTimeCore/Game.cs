@@ -179,7 +179,7 @@ namespace ItsLunchTimeCore
             foreach (PlayerBase player in Players)
             {
                 int coffee_count = Math.Min(4, _dessertCards[player].Where(x => x.Type == DessertType.Coffee).Count());
-                PublicBoard.AddVictoryPointsToPlayer(coffee_count.Terminal(), player, VictoryPointsSource.Dessert);
+                PublicBoard.AddVictoryPointsToPlayer(coffee_count.Termial(), player, VictoryPointsSource.Dessert);
 
                 int pudding_count = _dessertCards[player].Where(x => x.Type == DessertType.Pudding).Count();
                 PublicBoard.AddVictoryPointsToPlayer(pudding_count * PublicBoard.TeamBonusDoneCount, player, VictoryPointsSource.Dessert);

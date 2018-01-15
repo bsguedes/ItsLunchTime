@@ -106,6 +106,10 @@ namespace BotSample
                 if (this._prefCards.First().Undesired == restaurant)
                 {
                     preferenceHistogram.Preferences[r] /= 2;
+                    if (board.CurrentTeamBonus is WentOnceToUndesired)
+                    {
+                        preferenceHistogram.Preferences[r] += 20;
+                    }
                 }
                 if (modifier is OneDollarIncrease && modifier.Days.Contains(board.CurrentWeekDay))
                 {
@@ -129,6 +133,60 @@ namespace BotSample
                         foreach (KeyValuePair<Place, int> histogramEntry in pref.Preferences)
                         {
                             preferenceHistogram.Preferences[histogramEntry.Key] += (histogramEntry.Value * i) / 10;
+                        }
+                    }
+                }
+                if (board.CurrentTeamBonus is AllEatBrazilianAndChineseThreeTimes)
+                {
+                    if (r.Menu.Contains(FoodType.Brazilian) || r.Menu.Contains(FoodType.Chinese))
+                    {
+                        preferenceHistogram.Preferences[r] += 20;
+                    }
+                }
+                if (board.CurrentTeamBonus is AllEatBurgerAndPizzaThreeTimes)
+                {
+                    if (r.Menu.Contains(FoodType.Burger) || r.Menu.Contains(FoodType.Pizza))
+                    {
+                        preferenceHistogram.Preferences[r] += 20;
+                    }
+                }
+                if (board.CurrentTeamBonus is AllEatAllFoodAtLeastTwice)
+                {
+                    Dictionary<FoodType, int> foodTypes = new Dictionary<FoodType, int>();
+                    foreach (FoodType food in Extensions.FoodTypes)
+                    {
+                        foodTypes.Add(food, 0);
+                    }
+                    foreach (DayOfWeek day in Extensions.Weekdays.Where(x => x < board.CurrentWeekDay))
+                    {
+                        foreach (FoodType food in board.VisitedPlaces[this][day].Menu)
+                        {
+                            foodTypes[food]++;
+                        }
+                    }
+                    foreach (FoodType food in Extensions.FoodTypes)
+                    {
+                        if (foodTypes[food] < 2 && board.CurrentWeekDay > DayOfWeek.Tuesday && r.Menu.Contains(food))
+                        {
+                            preferenceHistogram.Preferences[r] += 15;
+                        }
+                    }
+                }
+                if (board.CurrentTeamBonus is NoPriceIncreasedThisWeek)
+                {
+                    if (r.Visitors.Sum(x => x.Value.Count) == board.Players.Count + 2)
+                    {
+                        preferenceHistogram.Preferences[r] /= 6;
+                    }
+                }
+                if (board.CurrentTeamBonus is NoMoreThan1MajorityInARestaurant)
+                {
+                    foreach (DayOfWeek day in Extensions.Weekdays)
+                    {
+                        if (board.RestaurantWithMajority(day) == r.Identifier)
+                        {
+                            preferenceHistogram.Preferences[r] /= 4;
+                            break;
                         }
                     }
                 }

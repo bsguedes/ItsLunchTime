@@ -24,6 +24,7 @@ namespace ItsLunchTimeCore
         internal RestaurantDailyModifierDeck RestaurantDailyModifierDeck { get; }
         internal DessertDeck DessertDeck { get; }
         internal DessertBuffet DessertBuffet { get; }
+        public int MajorityCount { get; private set; }
         private int FirstPlayerIndex = 0;
         private List<PlayerBase> _players;
         internal IEnumerable<PlayerBase> Players
@@ -449,13 +450,9 @@ namespace ItsLunchTimeCore
         {
             int net_score = 0;
             net_score += 1 * (PublicBoard.HasMajority(day) ? 1 : -1);
-            if (PublicBoard.HasUnanimity(day))
+            if (PublicBoard.HasMajority(day))
             {
-                net_score++;
-            }
-            if (PublicBoard.HasSomeoneAlone(day))
-            {
-                net_score--;
+                MajorityCount++;
             }
             PublicBoard.AddTeamScore(net_score);
         }

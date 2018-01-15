@@ -174,12 +174,12 @@ namespace ItsLunchTimeCore
 
         }
 
-        internal bool HasMajority(DayOfWeek day)
+        public bool HasMajority(DayOfWeek day)
         {
             return RestaurantWithMajority(day) != null;
         }
 
-        internal bool HasUnanimity(DayOfWeek day)
+        public bool HasUnanimity(DayOfWeek day)
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
@@ -191,7 +191,7 @@ namespace ItsLunchTimeCore
             return false;
         }
 
-        internal bool HasSomeoneAlone(DayOfWeek day)
+        public bool IsSomeoneAlone(DayOfWeek day)
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {
@@ -203,7 +203,7 @@ namespace ItsLunchTimeCore
             return Home.Visitors.Count > 0;
         }
 
-        internal bool RestaurantHasModifierForThisDay<T>(Restaurant restaurant, DayOfWeek day)
+        public bool RestaurantHasModifierForThisDay<T>(Restaurant restaurant, DayOfWeek day)
             where T : RestaurantDailyModifierCard
         {
             return Restaurants[restaurant].Modifier is T && Restaurants[restaurant].Modifier.Days.Contains(day);
@@ -249,13 +249,13 @@ namespace ItsLunchTimeCore
             this._undesiredRestaurants.Add(player, undesired);
         }
 
-        internal bool IsPlayerInMajority(DayOfWeek day, PlayerBase player)
+        public bool IsPlayerInMajority(DayOfWeek day, PlayerBase player)
         {
             Restaurant? majorityRestaurant = RestaurantWithMajority(day);
             return majorityRestaurant != null ? Restaurants[majorityRestaurant.Value].Visitors[day].Contains(player) : false;
         }
 
-        internal bool IsPlayerAlone(DayOfWeek day, PlayerBase player)
+        public bool IsPlayerAlone(DayOfWeek day, PlayerBase player)
         {
             if (Home.Visitors[day].Contains(player))
             {
@@ -264,7 +264,7 @@ namespace ItsLunchTimeCore
             return VisitedPlaces[player][day].Visitors[day].Count == 1;
         }
 
-        internal Restaurant? RestaurantWithMajority(DayOfWeek day)
+        public Restaurant? RestaurantWithMajority(DayOfWeek day)
         {
             foreach (Restaurant restaurant in Extensions.Restaurants)
             {

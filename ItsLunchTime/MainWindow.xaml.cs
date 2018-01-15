@@ -22,6 +22,9 @@ namespace ItsLunchTime
             Dictionary<Character, int> points = new Dictionary<Character, int>();
             Dictionary<Character, int> matches = new Dictionary<Character, int>();
             Dictionary<Character, Dictionary<VictoryPointsSource, int>> split = new Dictionary<Character, Dictionary<VictoryPointsSource, int>>();
+            int[] bonusTeam = new int[5];
+            int[] teamScore = new int[Game.MAX_TEAM_SCORE + 1];
+            int majorityCount = 0;
 
             foreach (Character c in Extensions.CharacterTypes)
             {
@@ -43,9 +46,11 @@ namespace ItsLunchTime
                     players.Add(new SampleBot(characters.ElementAt(j)));
                 }
                 Game game = new Game(players, DifficultyLevel.Easy);
-
+                teamScore[game.PublicBoard.TeamScore]++;
                 if (game.Win)
                 {
+                    majorityCount += game.MajorityCount;
+                    bonusTeam[game.PublicBoard.TeamBonusDoneCount]++;
                     foreach (PlayerBase player in players)
                     {
                         points[player.Character] += game.PublicBoard.PlayerScores[player];
@@ -58,7 +63,8 @@ namespace ItsLunchTime
                 }
             }
 
-            Console.WriteLine("Won games: {0}", matches.Sum(x => x.Value));
+            Console.WriteLine("Won games: {0} - team bonus: {1}", bonusTeam.Sum(), string.Join(", ", bonusTeam));
+            Console.WriteLine("Majorities: {1}    Team Score distribution: {0}", string.Join(", ", teamScore), majorityCount/ bonusTeam.Sum());
             foreach (Character c in points.OrderByDescending(x => x.Value / matches[x.Key]).Select(x => x.Key))
             {
                 Dictionary<VictoryPointsSource, int> dict = new Dictionary<VictoryPointsSource, int>();

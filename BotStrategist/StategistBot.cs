@@ -6,12 +6,21 @@ using System.Linq;
 
 namespace BotStrategist
 {
+    enum MoneyStatus
+    {
+        Good,
+        Medium,
+        Bad
+    }
+
     public class StategistBot : PlayerBase
     {
         List<FoodCard> _foodCards;
         List<LoyaltyCard> _loyaltyCards;
         List<PreferenceCard> _prefCards;
         PreferenceCard _chosenPreference;
+        FoodType _chosenFood;
+        FoodType _chosenFood2;
         Dictionary<Restaurant, int> _attractiveness;
 
         protected StategistBot(Character character) : base(character)
@@ -86,6 +95,36 @@ namespace BotStrategist
                     }
                 }
             }
+
+            switch (MoneyStatus(board))
+            {
+                case BotStrategist.MoneyStatus.Good:
+                    _attractiveness[Restaurant.JoeAndLeos] += 15;
+                    _attractiveness[Restaurant.Panorama] += 15;
+                    break;
+                case BotStrategist.MoneyStatus.Medium:
+                    _attractiveness[Restaurant.Silva] += 15;
+                    _attractiveness[Restaurant.GustoDiBacio] += 15;
+                    break;
+                case BotStrategist.MoneyStatus.Bad:
+                    _attractiveness[Restaurant.Palatus] += 15;
+                    _attractiveness[Restaurant.Russo] += 15;
+                    break;
+            }
+        }
+
+        private MoneyStatus MoneyStatus(PublicBoard board)
+        {
+            int day_count = board.CurrentDay / 7 * 5 + (board.CurrentDay % 7) - 1;
+            if (Cash > 3 * day_count)
+            {
+                return BotStrategist.MoneyStatus.Good;
+            }
+            else if (Cash > 3 * day_count - 5)
+            {
+                return BotStrategist.MoneyStatus.Medium;
+            }
+            return BotStrategist.MoneyStatus.Bad;
         }
 
         protected override void SignalNewWeek(PublicBoard board)
@@ -99,7 +138,70 @@ namespace BotStrategist
 
         protected override List<FoodType> AskFavoriteFood(PublicBoard board)
         {
-            throw new NotImplementedException();
+            if (Character == Character.Environment)
+            {
+                foreach (FoodCard card in _foodCards)
+                {
+                    if (card.Type == FoodType.Vegetarian)
+                    {
+                        _chosenFood = card.Type;
+                        return new List<FoodType> { card.Type };
+                    }
+                }
+            }
+            if (Character == Character.SalesRep)
+            {
+                int coverage_a = GetMenuCoverageForCards(board, _foodCards[0], _foodCards[1]);
+                int coverage_b = GetMenuCoverageForCards(board, _foodCards[0], _foodCards[2]);
+                int coverage_c = GetMenuCoverageForCards(board, _foodCards[1], _foodCards[2]);
+
+                if (coverage_a > coverage_b && coverage_a > coverage_c)
+                {
+                    _chosenFood = _foodCards[0].Type;
+                    _chosenFood2 = _foodCards[1].Type;
+                    return new List<FoodType> { _foodCards[0].Type, _foodCards[1].Type };
+                }
+                if (coverage_b > coverage_a && coverage_b > coverage_c)
+                {
+                    _chosenFood = _foodCards[0].Type;
+                    _chosenFood2 = _foodCards[2].Type;
+                    return new List<FoodType> { _foodCards[0].Type, _foodCards[2].Type };
+                }
+                _chosenFood = _foodCards[1].Type;
+                _chosenFood2 = _foodCards[2].Type;
+                return new List<FoodType> { _foodCards[1].Type, _foodCards[2].Type };
+            }
+            foreach (FoodCard card in _foodCards)
+            {
+                int coverage = 0;
+                foreach (Restaurant r in Extensions.Restaurants)
+                {
+                    if (board.Restaurants[r].Menu.Contains(card.Type))
+                    {
+                        coverage++;
+                    }
+                }
+                if (coverage == 6)
+                {
+                    return new List<FoodType> { card.Type };
+                }
+            }
+            return new List<FoodType> { _foodCards[0].Type };
+        }
+
+        private int GetMenuCoverageForCards(PublicBoard board, FoodCard foodCard1, FoodCard foodCard2)
+        {
+            int coverage = 0;
+
+            foreach (Restaurant r in Extensions.Restaurants)
+            {
+                if (board.Restaurants[r].Menu.Contains(foodCard1.Type) || board.Restaurants[r].Menu.Contains(foodCard2.Type))
+                {
+                    coverage++;
+                }
+            }
+
+            return coverage;
         }
 
         protected override Dictionary<PlayerBase, int> AskOpinionForDonationTeamObjective(PublicBoard board)
